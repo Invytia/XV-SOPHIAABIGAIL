@@ -228,10 +228,7 @@
             transform: translateY(0);
         }
 
-        /* ============================================
-           SECCIONES: cada <section> es un bloque
-           claramente delimitado del contenido
-           ============================================ */
+        /* Paneles de Contenido */
         .glass-panel {
             max-width: 550px;
             width: 100%;
@@ -258,7 +255,7 @@
         }
 
         /* ============================================
-           ANIMACIÓN DE ENTRADA DE SECCIONES
+           SISTEMA DE ANIMACIONES MEJORADO
            ============================================ */
         .reveal {
             opacity: 0;
@@ -271,12 +268,6 @@
             transform: translateY(0) scale(1);
         }
 
-        /* ============================================
-           ANIMACIÓN DE ENTRADA DE TEXTO / ELEMENTOS
-           Cada elemento .anim-item dentro de una sección
-           entra con un pequeño desfase (efecto cascada)
-           que se calcula por JS al activarse la sección.
-           ============================================ */
         .anim-item {
             opacity: 0;
             transform: translateY(22px);
@@ -288,7 +279,26 @@
             transform: translateY(0);
         }
 
-        /* Animación letra por letra para el título principal */
+        /* Flor de Loto animada (Latido Mágico) */
+        @keyframes lotus-pulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 8px var(--magic-glow)); }
+            50% { transform: scale(1.08); filter: drop-shadow(0 0 15px var(--gold-primary)); }
+        }
+        .lotus-anim svg {
+            animation: lotus-pulse 3s infinite ease-in-out;
+        }
+
+        /* Imagen Principal Flotante */
+        @keyframes float-hero {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-8px); }
+            100% { transform: translateY(0px); }
+        }
+        .float-anim {
+            animation: float-hero 5s infinite ease-in-out;
+        }
+
+        /* Entrada de Letras (Título) */
         @keyframes letterIn {
             from { opacity: 0; transform: translateY(24px) rotateX(55deg); }
             to { opacity: 1; transform: translateY(0) rotateX(0deg); }
@@ -306,12 +316,27 @@
             animation: letterIn 0.7s var(--ease-entrance) forwards;
         }
 
+        /* Divisores Animados de Anchura */
+        .divider {
+            width: 0px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--gold-primary), transparent);
+            margin: 32px auto;
+            transition: width 1.5s var(--ease-entrance);
+        }
+        .reveal.active .divider {
+            width: 80%;
+            max-width: 140px;
+        }
+
+        /* ============================================
+           ESTILOS DE TEXTO E IMÁGENES
+           ============================================ */
         .lotus-header { margin-bottom: 20px; }
         .lotus-header svg {
             width: 62px;
             height: 62px;
             fill: var(--gold-primary);
-            filter: drop-shadow(0 0 8px var(--magic-glow));
         }
 
         .section-tag {
@@ -326,11 +351,14 @@
 
         .main-title {
             font-family: 'Pinyon Script', cursive;
-            font-size: 82px;
+            /* Se ajusta de forma dinámica, evitando que se corte en móviles muy pequeños */
+            font-size: clamp(40px, 15vw, 82px); 
             color: var(--gold-primary);
             margin-bottom: 28px;
             text-shadow: 0 2px 12px rgba(223, 186, 107, 0.35);
-            line-height: 1.15;
+            line-height: 1.1;
+            padding: 0 5px;
+            word-wrap: break-word;
         }
 
         .hero-image-container {
@@ -348,7 +376,6 @@
             display: block;
         }
 
-        /* Imágenes de Galería */
         .gallery-photo {
             width: 100%;
             border-radius: 6px;
@@ -356,12 +383,20 @@
             margin: 20px 0;
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
             cursor: pointer;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
+        }
+
+        /* Animación de entrada inicial suave para fotos */
+        .reveal .gallery-photo.anim-item {
+            transform: scale(0.9) translateY(20px);
+        }
+        .reveal.active .gallery-photo.anim-item {
+            transform: scale(1) translateY(0);
         }
 
         .gallery-photo:hover {
-            transform: scale(1.02);
-            box-shadow: 0 0 20px var(--magic-glow);
+            transform: scale(1.03) !important;
+            box-shadow: 0 0 25px var(--magic-glow);
         }
 
         .phrase {
@@ -381,13 +416,6 @@
             font-size: 22px;
             display: block;
             margin-top: 10px;
-        }
-
-        .divider {
-            width: 60px;
-            height: 1px;
-            background: linear-gradient(to right, transparent, var(--gold-primary), transparent);
-            margin: 32px auto;
         }
 
         .info-label {
@@ -501,12 +529,19 @@
             border-radius: 50%;
             font-weight: bold;
             box-shadow: 0 0 10px var(--magic-glow);
+            animation: pulse-glow 2s infinite alternate;
+        }
+
+        @keyframes pulse-glow {
+            from { box-shadow: 0 0 10px var(--magic-glow); }
+            to { box-shadow: 0 0 20px var(--gold-primary); }
         }
 
         .calendar-day.empty { color: transparent; }
 
-        /* Botones Generales */
+        /* Botones Generales con Brillo (Shine) animado */
         .btn-gold {
+            position: relative;
             display: inline-block;
             background: transparent;
             color: var(--gold-primary);
@@ -523,12 +558,31 @@
             transition: all 0.3s ease;
             margin-top: 15px;
             width: 100%;
+            overflow: hidden;
+        }
+
+        .btn-gold::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 50%;
+            height: 100%;
+            background: linear-gradient(to right, transparent, rgba(255,255,255,0.25), transparent);
+            transform: skewX(-25deg);
+            animation: shine 4s infinite;
+        }
+
+        @keyframes shine {
+            0% { left: -100%; }
+            20% { left: 200%; }
+            100% { left: 200%; }
         }
 
         .btn-gold:hover {
             background: var(--gold-primary);
             color: var(--bg-dark);
-            box-shadow: 0 0 15px var(--magic-glow);
+            box-shadow: 0 0 20px var(--magic-glow);
         }
 
         /* Mapas */
@@ -570,11 +624,12 @@
             font-size: 16px;
             border-radius: 4px;
             outline: none;
-            transition: border 0.3s;
+            transition: border 0.3s, box-shadow 0.3s;
         }
 
         .form-input:focus {
             border-color: var(--gold-primary);
+            box-shadow: 0 0 10px rgba(223, 186, 107, 0.2);
         }
 
         .form-input::placeholder {
@@ -604,6 +659,12 @@
             box-shadow: 0 10px 25px rgba(0,0,0,0.8);
             margin: 0 auto;
             max-width: 320px;
+            animation: pulse-glow-box 3s infinite alternate;
+        }
+
+        @keyframes pulse-glow-box {
+            0% { box-shadow: 0 10px 25px rgba(0,0,0,0.8); }
+            100% { box-shadow: 0 10px 35px rgba(223, 186, 107, 0.15); }
         }
 
         .digital-ticket::before, .digital-ticket::after {
@@ -774,7 +835,7 @@
             z-index: 3001;
         }
 
-        /* Animaciones */
+        /* Animaciones Globales */
         @keyframes pulse {
             0% { opacity: 0.4; }
             50% { opacity: 0.9; }
@@ -788,17 +849,20 @@
             100% { transform: translateY(-100vh) translateX(50px) scale(1.2); opacity: 0; }
         }
 
-        /* Responsivo */
-        @media (max-width: 400px) {
+        /* Responsivo Especial */
+        @media (max-width: 420px) {
+            .glass-panel { padding: 35px 20px; }
+            .phrase { font-size: 21px; }
+        }
+
+        @media (max-width: 380px) {
             .envelope { width: 290px; height: 210px; }
             .envelope::before { border-right-width: 145px; border-top-width: 105px; border-bottom-width: 105px; }
             .envelope::after { border-left-width: 145px; border-top-width: 105px; border-bottom-width: 105px; }
             .front-flap { border-left-width: 145px; border-right-width: 145px; border-top-width: 115px; }
             .wax-seal { top: 95px; }
-            .main-title { font-size: 62px; }
-            .glass-panel { padding: 32px 18px; }
+            .glass-panel { padding: 30px 15px; }
             .names-list { font-size: 24px; }
-            .phrase { font-size: 20px; }
             .countdown-box { width: 64px; padding: 11px; }
             .countdown-number { font-size: 24px; }
             #music-btn { bottom: 20px; right: 20px; width: 45px; height: 45px; }
@@ -844,16 +908,17 @@
 
         <!-- ============ SECCIÓN: HERO / FECHA / CUENTA REGRESIVA / CALENDARIO ============ -->
         <section class="glass-panel panel-dark reveal" id="hero" aria-label="Portada de la invitación">
-            <div class="lotus-header anim-item">
+            <div class="lotus-header lotus-anim anim-item">
                 <svg viewBox="0 0 24 24">
                     <path d="M5 16L3 5L8.5 10L12 4L15.5 10L21 5L19 16H5M19 19C19 19.55 18.55 20 18 20H6C5.45 20 5 19.55 5 19V18H19V19Z"/>
                 </svg>
             </div>
 
             <div class="section-tag anim-item">Mis XV Años</div>
+            <!-- El título usa JS para asegurar que no se corten las letras en móviles -->
             <h1 class="main-title anim-item">Sophia Abigail</h1>
 
-            <div class="hero-image-container anim-item">
+            <div class="hero-image-container float-anim anim-item">
                 <img src="assets/hero.jpg" alt="Sophia Abigail">
             </div>
             
@@ -1056,7 +1121,7 @@
             <img src="assets/foto11.jpg" alt="Foto 11" class="gallery-photo anim-item" onclick="openLightbox('assets/foto11.jpg')">
         </section>
 
-        <!-- ============ SECCIÓN: PASE VIP (solo visible con ?p=1..6 en la URL) ============ -->
+        <!-- ============ SECCIÓN: PASE VIP ============ -->
         <section class="glass-panel panel-dark reveal" id="pases" aria-label="Pase digital VIP" style="display: none;">
             <div class="info-label anim-item">Tu Pase Digital VIP</div>
             <div class="digital-ticket anim-item">
@@ -1164,25 +1229,36 @@
         }
 
         // --- ANIMACIÓN LETRA POR LETRA DEL TÍTULO PRINCIPAL ---
+        // Mejorado para prevenir que las letras de una misma palabra se dividan a la mitad en móviles.
         function wrapTitleLetters() {
             const title = document.querySelector('.main-title');
             if (!title) return;
-            const text = title.textContent;
+            const words = title.textContent.split(' ');
             title.innerHTML = '';
-            [...text].forEach((ch) => {
-                const span = document.createElement('span');
-                span.className = 'letter';
-                span.textContent = ch === ' ' ? '\u00A0' : ch;
-                title.appendChild(span);
+            
+            words.forEach((word, index) => {
+                const wordSpan = document.createElement('span');
+                wordSpan.style.display = 'inline-block';
+                wordSpan.style.whiteSpace = 'nowrap';
+                
+                [...word].forEach((ch) => {
+                    const span = document.createElement('span');
+                    span.className = 'letter';
+                    span.textContent = ch;
+                    wordSpan.appendChild(span);
+                });
+                
+                title.appendChild(wordSpan);
+                if (index < words.length - 1) {
+                    const space = document.createElement('span');
+                    space.innerHTML = '&nbsp;';
+                    title.appendChild(space);
+                }
             });
         }
         wrapTitleLetters();
 
         // --- SISTEMA DE REVELADO DE SECCIONES Y TEXTO ---
-        // Usa IntersectionObserver (no depende del evento 'scroll', que en
-        // algunos navegadores/vistas embebidas puede no dispararse siempre).
-        // Al activarse una sección, sus elementos .anim-item y las letras del
-        // título (si aplica) reciben un pequeño desfase para animarse en cascada.
         const revealObserver = new IntersectionObserver((entries) => {
             entries.forEach((entry) => {
                 if (entry.isIntersecting) {
@@ -1207,8 +1283,6 @@
 
         function revealElements() {
             document.querySelectorAll('.reveal').forEach((el) => revealObserver.observe(el));
-            // Respaldo de seguridad: si por cualquier motivo el observer no
-            // llegara a activar algún panel, se muestra igualmente a los 4s.
             setTimeout(() => {
                 document.querySelectorAll('.reveal:not(.active)').forEach((el) => el.classList.add('active'));
             }, 4000);
@@ -1267,13 +1341,6 @@
         }, 1000);
 
         // --- SISTEMA DE PASES DIGITALES POR ENLACE ---
-        // La sección de pases permanece oculta (display:none) por defecto.
-        // Solo se muestra si la URL trae ?p=N, con N entero entre 1 y 6,
-        // y en ese caso el pase se llena automáticamente con N pases.
-        // Ejemplos:
-        //   invitacion.html            -> no muestra nada de pases
-        //   invitacion.html?p=1        -> muestra pase para 1 persona
-        //   invitacion.html?p=6        -> muestra pase para 6 personas
         function initPasses() {
             const params = new URLSearchParams(window.location.search);
             const raw = params.get('p');
