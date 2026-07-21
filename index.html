@@ -4,16 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mis XV Años - Sophia Abigail</title>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Pinyon+Script&family=Montserrat:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400;1,600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Pinyon+Script&family=Montserrat:wght@300;400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400;1,600&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg-dark: #071912;
             --gold-primary: #dfba6b;
             --gold-secondary: #c5a059;
             --text-light: #f4f0e6;
-            --text-muted: #a3b8b0;
+            --text-muted: #b7c9c2;
             --magic-glow: rgba(223, 186, 107, 0.4);
             --firefly-glow: rgba(173, 255, 47, 0.6);
+            --ease-entrance: cubic-bezier(0.16, 1, 0.3, 1);
         }
 
         * {
@@ -26,6 +27,7 @@
             width: 100%;
             height: 100%;
             font-family: 'Montserrat', sans-serif;
+            font-size: 17px;
             background-color: var(--bg-dark);
             color: var(--text-light);
             overflow-x: hidden;
@@ -67,7 +69,6 @@
             overflow: hidden;
         }
 
-        /* Capa oscura sobre el fondo del sobre para legibilidad */
         #envelope-screen::before {
             content: '';
             position: absolute;
@@ -188,7 +189,7 @@
             width: 100%;
             text-align: center;
             font-family: 'Cinzel', serif;
-            font-size: 14px;
+            font-size: 15px;
             color: var(--gold-primary);
             letter-spacing: 3px;
             text-transform: uppercase;
@@ -201,7 +202,7 @@
             width: 100%;
             text-align: center;
             font-family: 'Montserrat', sans-serif;
-            font-size: 11px;
+            font-size: 12px;
             color: var(--text-muted);
             letter-spacing: 1px;
             opacity: 0.7;
@@ -227,14 +228,17 @@
             transform: translateY(0);
         }
 
-        /* Diseño de Paneles Intercalados (Glassmorphism y Solidos) */
+        /* ============================================
+           SECCIONES: cada <section> es un bloque
+           claramente delimitado del contenido
+           ============================================ */
         .glass-panel {
             max-width: 550px;
             width: 100%;
-            padding: 40px 25px;
+            padding: 45px 25px;
             text-align: center;
             position: relative;
-            margin-bottom: 30px;
+            margin-bottom: 34px;
             border-radius: 12px;
             z-index: 3;
         }
@@ -253,42 +257,80 @@
             backdrop-filter: blur(12px);
         }
 
-        /* Animaciones de Scroll Continúas (Reveal) */
+        /* ============================================
+           ANIMACIÓN DE ENTRADA DE SECCIONES
+           ============================================ */
         .reveal {
             opacity: 0;
-            transform: translateY(40px);
-            transition: all 1s ease-out;
+            transform: translateY(55px) scale(0.97);
+            transition: opacity 1s var(--ease-entrance), transform 1s var(--ease-entrance);
         }
 
         .reveal.active {
             opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* ============================================
+           ANIMACIÓN DE ENTRADA DE TEXTO / ELEMENTOS
+           Cada elemento .anim-item dentro de una sección
+           entra con un pequeño desfase (efecto cascada)
+           que se calcula por JS al activarse la sección.
+           ============================================ */
+        .anim-item {
+            opacity: 0;
+            transform: translateY(22px);
+            transition: opacity 0.8s var(--ease-entrance), transform 0.8s var(--ease-entrance);
+        }
+
+        .reveal.active .anim-item {
+            opacity: 1;
             transform: translateY(0);
+        }
+
+        /* Animación letra por letra para el título principal */
+        @keyframes letterIn {
+            from { opacity: 0; transform: translateY(24px) rotateX(55deg); }
+            to { opacity: 1; transform: translateY(0) rotateX(0deg); }
+        }
+
+        .main-title { perspective: 600px; }
+
+        .main-title .letter {
+            display: inline-block;
+            opacity: 0;
+            transform-origin: bottom;
+        }
+
+        .reveal.active .main-title .letter {
+            animation: letterIn 0.7s var(--ease-entrance) forwards;
         }
 
         .lotus-header { margin-bottom: 20px; }
         .lotus-header svg {
-            width: 60px;
-            height: 60px;
+            width: 62px;
+            height: 62px;
             fill: var(--gold-primary);
             filter: drop-shadow(0 0 8px var(--magic-glow));
         }
 
         .section-tag {
             font-family: 'Cinzel', serif;
-            font-size: 13px;
+            font-size: 15px;
             letter-spacing: 5px;
             color: var(--text-muted);
             text-transform: uppercase;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            font-weight: 600;
         }
 
         .main-title {
             font-family: 'Pinyon Script', cursive;
-            font-size: 70px;
+            font-size: 82px;
             color: var(--gold-primary);
-            margin-bottom: 25px;
-            text-shadow: 0 2px 10px rgba(223, 186, 107, 0.3);
-            line-height: 1.1;
+            margin-bottom: 28px;
+            text-shadow: 0 2px 12px rgba(223, 186, 107, 0.35);
+            line-height: 1.15;
         }
 
         .hero-image-container {
@@ -296,7 +338,7 @@
             border-radius: 8px;
             overflow: hidden;
             border: 2px solid var(--gold-primary);
-            margin-bottom: 30px;
+            margin-bottom: 32px;
             box-shadow: 0 0 25px rgba(223, 186, 107, 0.2);
         }
 
@@ -306,7 +348,7 @@
             display: block;
         }
 
-        /* Imágenes de Galería (1 a 11) */
+        /* Imágenes de Galería */
         .gallery-photo {
             width: 100%;
             border-radius: 6px;
@@ -324,9 +366,9 @@
 
         .phrase {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 20px;
+            font-size: 23px;
             color: var(--text-light);
-            line-height: 1.6;
+            line-height: 1.75;
             margin-bottom: 20px;
             padding: 0 10px;
             font-style: italic;
@@ -336,7 +378,7 @@
             font-style: normal;
             font-weight: 600;
             color: var(--gold-primary);
-            font-size: 19px;
+            font-size: 22px;
             display: block;
             margin-top: 10px;
         }
@@ -345,21 +387,22 @@
             width: 60px;
             height: 1px;
             background: linear-gradient(to right, transparent, var(--gold-primary), transparent);
-            margin: 30px auto;
+            margin: 32px auto;
         }
 
         .info-label {
             font-family: 'Cinzel', serif;
-            font-size: 12px;
+            font-size: 14px;
             letter-spacing: 3px;
             color: var(--gold-primary);
             text-transform: uppercase;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            font-weight: 600;
         }
 
         .info-value-main {
             font-family: 'Cinzel', serif;
-            font-size: 24px;
+            font-size: 28px;
             font-weight: 600;
             color: var(--text-light);
             letter-spacing: 2px;
@@ -367,7 +410,8 @@
 
         .names-list {
             font-family: 'Cormorant Garamond', serif;
-            font-size: 24px;
+            font-size: 27px;
+            font-weight: 600;
             color: var(--text-light);
             margin: 8px 0;
             letter-spacing: 1px;
@@ -378,7 +422,7 @@
             display: flex;
             justify-content: center;
             gap: 15px;
-            margin: 20px 0;
+            margin: 22px 0;
         }
 
         .countdown-box {
@@ -388,24 +432,25 @@
             background: rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(223, 186, 107, 0.4);
             border-radius: 8px;
-            padding: 12px;
-            width: 70px;
+            padding: 14px;
+            width: 76px;
             box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
         }
 
         .countdown-number {
             font-family: 'Cinzel', serif;
-            font-size: 26px;
+            font-size: 30px;
             color: var(--gold-primary);
             font-weight: bold;
         }
 
         .countdown-label {
-            font-size: 11px;
+            font-size: 12px;
             text-transform: uppercase;
             color: var(--text-muted);
-            margin-top: 5px;
+            margin-top: 6px;
             letter-spacing: 1px;
+            font-weight: 500;
         }
 
         /* Calendario */
@@ -420,7 +465,7 @@
 
         .calendar-month {
             font-family: 'Cinzel', serif;
-            font-size: 18px;
+            font-size: 20px;
             color: var(--gold-primary);
             margin-bottom: 15px;
             letter-spacing: 2px;
@@ -431,7 +476,7 @@
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 6px;
-            font-size: 14px;
+            font-size: 15px;
         }
 
         .calendar-day-header {
@@ -466,9 +511,10 @@
             background: transparent;
             color: var(--gold-primary);
             border: 1px solid var(--gold-primary);
-            padding: 14px 25px;
+            padding: 16px 25px;
             font-family: 'Cinzel', serif;
-            font-size: 13px;
+            font-size: 14px;
+            font-weight: 600;
             letter-spacing: 2px;
             text-transform: uppercase;
             text-decoration: none;
@@ -516,11 +562,12 @@
 
         .form-input {
             width: 100%;
-            padding: 14px;
+            padding: 15px;
             background: rgba(0, 0, 0, 0.4);
             border: 1px solid rgba(223, 186, 107, 0.4);
             color: var(--text-light);
             font-family: 'Montserrat', sans-serif;
+            font-size: 16px;
             border-radius: 4px;
             outline: none;
             transition: border 0.3s;
@@ -550,19 +597,13 @@
             background: linear-gradient(135deg, #0d2e22 0%, #081d15 100%);
             border: 1px solid var(--gold-primary);
             border-radius: 12px;
-            padding: 25px 15px;
+            padding: 28px 15px;
             text-align: center;
             position: relative;
             overflow: hidden;
             box-shadow: 0 10px 25px rgba(0,0,0,0.8);
             margin: 0 auto;
             max-width: 320px;
-            animation: fadeInTicket 0.8s ease-out forwards;
-        }
-
-        @keyframes fadeInTicket {
-            from { opacity: 0; transform: scale(0.9) translateY(-10px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
         .digital-ticket::before, .digital-ticket::after {
@@ -591,7 +632,7 @@
 
         .ticket-header {
             font-family: 'Cinzel', serif;
-            font-size: 15px;
+            font-size: 16px;
             color: var(--text-muted);
             letter-spacing: 4px;
             text-transform: uppercase;
@@ -602,14 +643,34 @@
 
         .ticket-body { padding: 10px 0; }
 
+        .ticket-label-small {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .ticket-count {
+            font-family: 'Cinzel', serif;
+            font-weight: 700;
+            font-size: 48px;
+            color: #fff;
+            line-height: 1;
+            text-shadow: 0 0 10px var(--magic-glow);
+        }
+
         .ticket-footer {
-            font-size: 10px;
+            font-size: 11px;
             color: var(--gold-secondary);
-            margin-top: 15px;
+            margin-top: 16px;
             border-top: 1px dashed rgba(223, 186, 107, 0.3);
-            padding-top: 15px;
+            padding-top: 16px;
             letter-spacing: 1px;
             text-transform: uppercase;
+            font-weight: 500;
         }
 
         /* Luciérnagas Animadas */
@@ -734,11 +795,12 @@
             .envelope::after { border-left-width: 145px; border-top-width: 105px; border-bottom-width: 105px; }
             .front-flap { border-left-width: 145px; border-right-width: 145px; border-top-width: 115px; }
             .wax-seal { top: 95px; }
-            .main-title { font-size: 55px; }
-            .glass-panel { padding: 30px 15px; }
-            .names-list { font-size: 22px; }
-            .countdown-box { width: 60px; padding: 10px; }
-            .countdown-number { font-size: 22px; }
+            .main-title { font-size: 62px; }
+            .glass-panel { padding: 32px 18px; }
+            .names-list { font-size: 24px; }
+            .phrase { font-size: 20px; }
+            .countdown-box { width: 64px; padding: 11px; }
+            .countdown-number { font-size: 24px; }
             #music-btn { bottom: 20px; right: 20px; width: 45px; height: 45px; }
             #music-btn svg { width: 20px; height: 20px; }
         }
@@ -772,40 +834,40 @@
                 </svg>
             </div>
             <div class="envelope"></div>
-            <div class="envelope-text">Mis XV Años<br><span style="color: #fff; font-size: 14px; letter-spacing: 4px;">Sophia Abigail</span></div>
+            <div class="envelope-text">Mis XV Años<br><span style="color: #fff; font-size: 15px; letter-spacing: 4px;">Sophia Abigail</span></div>
             <div class="hint-text">Toca el sello para abrir</div>
         </div>
     </div>
 
     <!-- Contenido de la Invitación Principal -->
     <main id="main-invitation">
-        
-        <!-- PANEL 1: Hero y Fecha (Oscuro) -->
-        <div class="glass-panel panel-dark reveal">
-            <div class="lotus-header">
+
+        <!-- ============ SECCIÓN: HERO / FECHA / CUENTA REGRESIVA / CALENDARIO ============ -->
+        <section class="glass-panel panel-dark reveal" id="hero" aria-label="Portada de la invitación">
+            <div class="lotus-header anim-item">
                 <svg viewBox="0 0 24 24">
                     <path d="M5 16L3 5L8.5 10L12 4L15.5 10L21 5L19 16H5M19 19C19 19.55 18.55 20 18 20H6C5.45 20 5 19.55 5 19V18H19V19Z"/>
                 </svg>
             </div>
 
-            <div class="section-tag">Mis XV Años</div>
-            <h1 class="main-title">Sophia Abigail</h1>
+            <div class="section-tag anim-item">Mis XV Años</div>
+            <h1 class="main-title anim-item">Sophia Abigail</h1>
 
-            <div class="hero-image-container">
+            <div class="hero-image-container anim-item">
                 <img src="assets/hero.jpg" alt="Sophia Abigail">
             </div>
             
-            <p class="phrase">
+            <p class="phrase anim-item">
                 "Los sueños se cumplen, y hoy uno de los míos se hace realidad, con la bendición de Dios y el amor de mi familia."
             </p>
 
             <div class="divider"></div>
 
-            <div class="info-label">Fecha del Evento</div>
-            <div class="info-value-main" style="color: var(--gold-primary);">7 de Noviembre</div>
+            <div class="info-label anim-item">Fecha del Evento</div>
+            <div class="info-value-main anim-item" style="color: var(--gold-primary);">7 de Noviembre</div>
             
             <!-- Cuenta Regresiva -->
-            <div class="countdown-container">
+            <div class="countdown-container anim-item">
                 <div class="countdown-box">
                     <div class="countdown-number" id="days">00</div>
                     <div class="countdown-label">Días</div>
@@ -825,7 +887,7 @@
             </div>
 
             <!-- Widget Calendario Noviembre 2026 -->
-            <div class="calendar-container">
+            <div class="calendar-container anim-item">
                 <div class="calendar-month">Noviembre</div>
                 <div class="calendar-grid">
                     <div class="calendar-day-header">D</div>
@@ -874,167 +936,150 @@
                 </div>
             </div>
 
-            <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=XV+A%C3%B1os+de+Sophia+Abigail&dates=20261107T233000Z/20261108T060000Z&details=Celebremos+juntos+este+d%C3%ADa+tan+especial" target="_blank" class="btn-gold" style="width: auto;">
+            <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=XV+A%C3%B1os+de+Sophia+Abigail&dates=20261107T233000Z/20261108T060000Z&details=Celebremos+juntos+este+d%C3%ADa+tan+especial" target="_blank" class="btn-gold anim-item" style="width: auto;">
                 Agregar al Calendario
             </a>
-        </div>
+        </section>
 
-        <!-- FOTO INTERCALADA 1 -->
-        <div class="glass-panel panel-light reveal" style="padding: 20px;">
-            <img src="assets/foto1.jpg" alt="Foto 1" class="gallery-photo" onclick="openLightbox('assets/foto1.jpg')">
-            <img src="assets/foto2.jpg" alt="Foto 2" class="gallery-photo" onclick="openLightbox('assets/foto2.jpg')">
-        </div>
+        <!-- ============ SECCIÓN: GALERÍA 1 ============ -->
+        <section class="glass-panel panel-light reveal" id="galeria-1" style="padding: 20px;" aria-label="Galería de fotos 1">
+            <img src="assets/foto1.jpg" alt="Foto 1" class="gallery-photo anim-item" onclick="openLightbox('assets/foto1.jpg')">
+            <img src="assets/foto2.jpg" alt="Foto 2" class="gallery-photo anim-item" onclick="openLightbox('assets/foto2.jpg')">
+        </section>
 
-        <!-- PANEL 2: Padres y Padrinos (Oscuro) -->
-        <div class="glass-panel panel-dark reveal">
-            <div class="info-label">Con la bendición de Dios y de mi madre</div>
-            <div class="names-list">Ximena Barrera Rodríguez</div>
+        <!-- ============ SECCIÓN: PADRES Y PADRINOS ============ -->
+        <section class="glass-panel panel-dark reveal" id="familia" aria-label="Padres y padrinos">
+            <div class="info-label anim-item">Con la bendición de Dios y de mi madre</div>
+            <div class="names-list anim-item">Ximena Barrera Rodríguez</div>
             
             <div class="divider"></div>
 
-            <div class="info-label">Mis Padrinos</div>
-            <div class="names-list">Gustavo Mendoza</div>
-            <div class="names-list">Gabriela Mendoza</div>
-        </div>
+            <div class="info-label anim-item">Mis Padrinos</div>
+            <div class="names-list anim-item">Gustavo Mendoza</div>
+            <div class="names-list anim-item">Gabriela Mendoza</div>
+        </section>
 
-        <!-- FOTOS INTERCALADAS -->
-        <div class="glass-panel panel-light reveal" style="padding: 20px;">
-            <img src="assets/foto3.jpg" alt="Foto 3" class="gallery-photo" onclick="openLightbox('assets/foto3.jpg')">
-            <img src="assets/foto4.jpg" alt="Foto 4" class="gallery-photo" onclick="openLightbox('assets/foto4.jpg')">
-        </div>
+        <!-- ============ SECCIÓN: GALERÍA 2 ============ -->
+        <section class="glass-panel panel-light reveal" id="galeria-2" style="padding: 20px;" aria-label="Galería de fotos 2">
+            <img src="assets/foto3.jpg" alt="Foto 3" class="gallery-photo anim-item" onclick="openLightbox('assets/foto3.jpg')">
+            <img src="assets/foto4.jpg" alt="Foto 4" class="gallery-photo anim-item" onclick="openLightbox('assets/foto4.jpg')">
+        </section>
 
-        <!-- PANEL 3: Ubicación (Oscuro) -->
-        <div class="glass-panel panel-dark reveal">
-            <div class="info-label" style="font-size: 16px;">Ceremonia y Recepción</div>
-            <div class="names-list" style="margin-top: 15px;">Palacio La Rochelle</div>
-            <div class="names-list" style="font-size: 20px;">Salón Candiles 1</div>
+        <!-- ============ SECCIÓN: UBICACIÓN Y HORARIOS ============ -->
+        <section class="glass-panel panel-dark reveal" id="ubicacion" aria-label="Ubicación y horarios del evento">
+            <div class="info-label anim-item" style="font-size: 17px;">Ceremonia y Recepción</div>
+            <div class="names-list anim-item" style="margin-top: 15px;">Palacio La Rochelle</div>
+            <div class="names-list anim-item" style="font-size: 22px;">Salón Candiles 1</div>
             
-            <div class="divider" style="margin: 20px auto; width: 40px;"></div>
+            <div class="divider"></div>
 
-            <div style="display: flex; justify-content: space-around; margin-bottom: 20px;">
+            <div class="anim-item" style="display: flex; justify-content: space-around; margin-bottom: 20px;">
                 <div>
                     <div class="info-label">Recepción</div>
-                    <div style="font-size: 24px; color: var(--gold-primary); font-family: 'Cinzel', serif; font-weight: bold;">6:30 PM</div>
+                    <div style="font-size: 26px; color: var(--gold-primary); font-family: 'Cinzel', serif; font-weight: bold;">6:30 PM</div>
                 </div>
                 <div>
                     <div class="info-label">Ceremonia</div>
-                    <div style="font-size: 24px; color: var(--gold-primary); font-family: 'Cinzel', serif; font-weight: bold;">7:00 PM</div>
+                    <div style="font-size: 26px; color: var(--gold-primary); font-family: 'Cinzel', serif; font-weight: bold;">7:00 PM</div>
                 </div>
             </div>
 
-            <div class="map-container">
+            <div class="map-container anim-item">
                 <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3764.6659995954574!2d-99.19666691734592!3d19.340294397021516!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d20001bee8346d%3A0x9f9d0e0bee818bcb!2sPalacio%20La%20Rochelle%20San%20%C3%81ngel!5e0!3m2!1ses-419!2smx!4v1784593868507!5m2!1ses-419!2smx" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
             </div>
-            <a href="https://maps.app.goo.gl/bdK6rRJMWqfDh3db8" target="_blank" class="btn-gold">Ver Ubicación en Mapa</a>
-        </div>
+            <a href="https://maps.app.goo.gl/bdK6rRJMWqfDh3db8" target="_blank" class="btn-gold anim-item">Ver Ubicación en Mapa</a>
+        </section>
 
-        <!-- FOTOS INTERCALADAS -->
-        <div class="glass-panel panel-light reveal" style="padding: 20px;">
-            <img src="assets/foto5.jpg" alt="Foto 5" class="gallery-photo" onclick="openLightbox('assets/foto5.jpg')">
-            <img src="assets/foto6.jpg" alt="Foto 6" class="gallery-photo" onclick="openLightbox('assets/foto6.jpg')">
-        </div>
+        <!-- ============ SECCIÓN: GALERÍA 3 ============ -->
+        <section class="glass-panel panel-light reveal" id="galeria-3" style="padding: 20px;" aria-label="Galería de fotos 3">
+            <img src="assets/foto5.jpg" alt="Foto 5" class="gallery-photo anim-item" onclick="openLightbox('assets/foto5.jpg')">
+            <img src="assets/foto6.jpg" alt="Foto 6" class="gallery-photo anim-item" onclick="openLightbox('assets/foto6.jpg')">
+        </section>
 
-        <!-- PANEL 4: Detalles (Oscuro) -->
-        <div class="glass-panel panel-dark reveal">
-            <!-- Código de Vestimenta -->
-            <div class="info-label">Código de Vestimenta</div>
-            <div class="info-value-main" style="font-size: 22px; margin-bottom: 5px;">Formal</div>
-            <div style="font-family: 'Montserrat', sans-serif; font-size: 12px; color: var(--text-muted); padding: 0 10px;">(Favor de reservar el color <span style="color: #a4de8b; font-weight: 500;">verde</span> para la quinceañera)</div>
+        <!-- ============ SECCIÓN: CÓDIGO DE VESTIMENTA ============ -->
+        <section class="glass-panel panel-dark reveal" id="vestimenta" aria-label="Código de vestimenta">
+            <div class="info-label anim-item">Código de Vestimenta</div>
+            <div class="info-value-main anim-item" style="font-size: 24px; margin-bottom: 5px;">Formal</div>
+            <div class="anim-item" style="font-family: 'Montserrat', sans-serif; font-size: 14px; color: var(--text-muted); padding: 0 10px;">(Favor de reservar el color <span style="color: #a4de8b; font-weight: 600;">verde</span> para la quinceañera)</div>
+        </section>
 
-            <div class="divider"></div>
-
-            <!-- Mesa de Regalos / Lluvia de Sobres / Amazon -->
-            <div class="info-label">Si Quieres Hacerme Un Regalo</div>
+        <!-- ============ SECCIÓN: REGALOS ============ -->
+        <section class="glass-panel panel-dark reveal" id="regalos" aria-label="Opciones de regalo">
+            <div class="info-label anim-item">Si Quieres Hacerme Un Regalo</div>
             
-            <svg viewBox="0 0 24 24" style="width: 50px; height: 50px; fill: var(--gold-primary); margin: 15px 0; filter: drop-shadow(0 0 5px var(--magic-glow));">
+            <svg class="anim-item" viewBox="0 0 24 24" style="width: 52px; height: 52px; fill: var(--gold-primary); margin: 15px 0; filter: drop-shadow(0 0 5px var(--magic-glow));">
                 <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm16 2H4v1.97l8 4.66 8-4.66V6zm0 12v-8.46l-8 4.66-8-4.66V18h16z"/>
             </svg>
             
-            <div class="info-value-main" style="font-size: 20px; margin-bottom: 10px;">Lluvia de Sobres</div>
-            <div style="font-family: 'Montserrat', sans-serif; font-size: 13px; color: var(--text-muted); padding: 0 10px;">
+            <div class="info-value-main anim-item" style="font-size: 22px; margin-bottom: 10px;">Lluvia de Sobres</div>
+            <div class="anim-item" style="font-family: 'Montserrat', sans-serif; font-size: 15px; color: var(--text-muted); padding: 0 10px;">
                 Es la tradición de regalar dinero en efectivo a la festejada el día del evento, el cual se deposita en un buzón especial en la recepción.
             </div>
 
-            <div style="margin: 25px 0;">
-                <span style="font-family: 'Cinzel', serif; font-size: 14px; color: var(--gold-secondary); letter-spacing: 2px;">O BIEN</span>
+            <div class="anim-item" style="margin: 25px 0;">
+                <span style="font-family: 'Cinzel', serif; font-size: 15px; color: var(--gold-secondary); letter-spacing: 2px;">O BIEN</span>
             </div>
 
-            <div class="info-value-main" style="font-size: 20px; margin-bottom: 10px;">Mesa de Regalos</div>
-            <div style="font-family: 'Montserrat', sans-serif; font-size: 13px; color: var(--text-muted); padding: 0 10px; margin-bottom: 20px;">
+            <div class="info-value-main anim-item" style="font-size: 22px; margin-bottom: 10px;">Mesa de Regalos</div>
+            <div class="anim-item" style="font-family: 'Montserrat', sans-serif; font-size: 15px; color: var(--text-muted); padding: 0 10px; margin-bottom: 20px;">
                 También he preparado una lista de deseos en Amazon con algunas cosas que me encantarían. ¡Agradezco mucho tu cariño!
             </div>
-            <a href="https://www.amazon.com.mx/hz/wishlist/ls/S8LAE7R2VWUQ?ref_=wl_share" target="_blank" class="btn-gold" style="width: auto;">Ver Mesa de Regalos en Amazon</a>
-            
-            <div class="divider"></div>
+            <a href="https://www.amazon.com.mx/hz/wishlist/ls/S8LAE7R2VWUQ?ref_=wl_share" target="_blank" class="btn-gold anim-item" style="width: auto;">Ver Mesa de Regalos en Amazon</a>
+        </section>
 
-            <!-- Galería en Vivo -->
-            <div class="info-label">Comparte tus Momentos</div>
-            <div style="font-family: 'Montserrat', sans-serif; font-size: 13px; color: var(--text-muted); padding: 0 10px; margin-bottom: 20px;">
+        <!-- ============ SECCIÓN: GALERÍA EN VIVO ============ -->
+        <section class="glass-panel panel-dark reveal" id="galeria-en-vivo" aria-label="Galería en vivo compartida">
+            <div class="info-label anim-item">Comparte tus Momentos</div>
+            <div class="anim-item" style="font-family: 'Montserrat', sans-serif; font-size: 15px; color: var(--text-muted); padding: 0 10px; margin-bottom: 20px;">
                 Toma muchas fotos durante la fiesta y súbelas a nuestra carpeta compartida para que todos podamos disfrutar esos bonitos recuerdos.
             </div>
-            <a href="https://drive.google.com/drive/folders/19dQJYYbfVPX6Yb47ZJJEk8o0sSjDKjhH?usp=sharing" target="_blank" class="btn-gold" style="width: auto;">Abrir Galería en Vivo</a>
-        </div>
+            <a href="https://drive.google.com/drive/folders/19dQJYYbfVPX6Yb47ZJJEk8o0sSjDKjhH?usp=sharing" target="_blank" class="btn-gold anim-item" style="width: auto;">Abrir Galería en Vivo</a>
+        </section>
 
-        <!-- FOTOS INTERCALADAS -->
-        <div class="glass-panel panel-light reveal" style="padding: 20px;">
-            <img src="assets/foto7.jpg" alt="Foto 7" class="gallery-photo" onclick="openLightbox('assets/foto7.jpg')">
-            <img src="assets/foto8.jpg" alt="Foto 8" class="gallery-photo" onclick="openLightbox('assets/foto8.jpg')">
-        </div>
+        <!-- ============ SECCIÓN: GALERÍA 4 ============ -->
+        <section class="glass-panel panel-light reveal" id="galeria-4" style="padding: 20px;" aria-label="Galería de fotos 4">
+            <img src="assets/foto7.jpg" alt="Foto 7" class="gallery-photo anim-item" onclick="openLightbox('assets/foto7.jpg')">
+            <img src="assets/foto8.jpg" alt="Foto 8" class="gallery-photo anim-item" onclick="openLightbox('assets/foto8.jpg')">
+        </section>
 
-        <!-- PANEL 5: Frase Especial (Transparente Light) -->
-        <div class="glass-panel panel-light reveal">
-            <p class="phrase" style="margin: 0; font-size: 22px;">
+        <!-- ============ SECCIÓN: FRASE ESPECIAL ============ -->
+        <section class="glass-panel panel-light reveal" id="frase" aria-label="Frase especial">
+            <p class="phrase anim-item" style="margin: 0; font-size: 24px;">
                 <span class="phrase-bold">"Bajo la estrella Evangeline, los sueños florecen y la magia despierta.<br><br>Te invito a acompañarme a celebrar mis XV años, en una noche donde los cuentos cobran vida y creer es el primer paso hacia un final feliz."</span>
             </p>
-        </div>
+        </section>
 
-        <!-- FOTOS INTERCALADAS -->
-        <div class="glass-panel panel-dark reveal" style="padding: 20px; background: rgba(7, 25, 18, 0.5);">
-            <img src="assets/foto9.jpg" alt="Foto 9" class="gallery-photo" onclick="openLightbox('assets/foto9.jpg')">
-            <img src="assets/foto10.jpg" alt="Foto 10" class="gallery-photo" onclick="openLightbox('assets/foto10.jpg')">
-            <img src="assets/foto11.jpg" alt="Foto 11" class="gallery-photo" onclick="openLightbox('assets/foto11.jpg')">
-        </div>
+        <!-- ============ SECCIÓN: GALERÍA 5 ============ -->
+        <section class="glass-panel panel-dark reveal" id="galeria-5" style="padding: 20px; background: rgba(7, 25, 18, 0.5);" aria-label="Galería de fotos 5">
+            <img src="assets/foto9.jpg" alt="Foto 9" class="gallery-photo anim-item" onclick="openLightbox('assets/foto9.jpg')">
+            <img src="assets/foto10.jpg" alt="Foto 10" class="gallery-photo anim-item" onclick="openLightbox('assets/foto10.jpg')">
+            <img src="assets/foto11.jpg" alt="Foto 11" class="gallery-photo anim-item" onclick="openLightbox('assets/foto11.jpg')">
+        </section>
 
-        <!-- PANEL 6: Formularios y RSVP (Oscuro) -->
-        <div class="glass-panel panel-dark reveal">
-            
-            <!-- Pases Digitales -->
-            <div class="info-label">Consulta tus Pases VIP</div>
-            <div style="font-family: 'Montserrat', sans-serif; font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Escribe tu nombre tal como aparece en tu invitación para descubrir tu boleto dorado.</div>
-            
-            <div class="form-container" style="margin-bottom: 25px;">
-                <input type="text" id="guest-search" class="form-input" placeholder="Ej. Marcos Cruz" onkeypress="if(event.key === 'Enter') searchPasses();">
-                <button onclick="searchPasses()" class="btn-gold">Buscar mis pases</button>
-                <div id="search-error" style="color: #ff6b6b; font-size: 12px; margin-top: 10px; display: none;">Nombre no encontrado. Intenta de nuevo o contacta a la quinceañera.</div>
-            </div>
-
-            <!-- Boleto Visual (Oculto por defecto) -->
-            <div id="ticket-container" style="display: none; margin-bottom: 30px;">
-                <div class="digital-ticket">
-                    <div class="ticket-header">
-                        <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; fill: var(--gold-primary); vertical-align: bottom; margin-right: 5px;"><path d="M12 2L15 9H22L16.5 13.5L18.5 21L12 17L5.5 21L7.5 13.5L2 9H9L12 2Z"/></svg>
-                        Pase Digital VIP
-                        <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; fill: var(--gold-primary); vertical-align: bottom; margin-left: 5px;"><path d="M12 2L15 9H22L16.5 13.5L18.5 21L12 17L5.5 21L7.5 13.5L2 9H9L12 2Z"/></svg>
-                    </div>
-                    
-                    <div class="ticket-body">
-                        <div id="ticket-name" style="font-family: 'Cinzel', serif; font-size: 18px; color: var(--gold-primary); margin-bottom: 15px; font-weight: bold; letter-spacing: 1px;"></div>
-                        <div style="font-family: 'Montserrat', sans-serif; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px;">Pases Asignados</div>
-                        <div id="ticket-count" style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 40px; color: #fff; line-height: 1; text-shadow: 0 0 10px var(--magic-glow);"></div>
-                    </div>
-                    
-                    <div class="ticket-footer">
-                        Toma captura de pantalla y presenta este pase al llegar al evento
-                    </div>
+        <!-- ============ SECCIÓN: PASE VIP (solo visible con ?p=1..6 en la URL) ============ -->
+        <section class="glass-panel panel-dark reveal" id="pases" aria-label="Pase digital VIP" style="display: none;">
+            <div class="info-label anim-item">Tu Pase Digital VIP</div>
+            <div class="digital-ticket anim-item">
+                <div class="ticket-header">
+                    <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; fill: var(--gold-primary); vertical-align: bottom; margin-right: 5px;"><path d="M12 2L15 9H22L16.5 13.5L18.5 21L12 17L5.5 21L7.5 13.5L2 9H9L12 2Z"/></svg>
+                    Pase Digital VIP
+                    <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; fill: var(--gold-primary); vertical-align: bottom; margin-left: 5px;"><path d="M12 2L15 9H22L16.5 13.5L18.5 21L12 17L5.5 21L7.5 13.5L2 9H9L12 2Z"/></svg>
+                </div>
+                <div class="ticket-body">
+                    <div class="ticket-label-small">Pases Asignados</div>
+                    <div id="ticket-count" class="ticket-count">0 PASES</div>
+                </div>
+                <div class="ticket-footer">
+                    Toma captura de pantalla y presenta este pase al llegar al evento
                 </div>
             </div>
+        </section>
 
-            <div class="divider"></div>
-
-            <!-- RSVP -->
-            <div class="info-label">Confirmación de Asistencia</div>
-            <div style="font-family: 'Montserrat', sans-serif; font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Agradeceremos tu confirmación lo antes posible.</div>
-            <div class="form-container">
+        <!-- ============ SECCIÓN: CONFIRMACIÓN DE ASISTENCIA (RSVP) ============ -->
+        <section class="glass-panel panel-dark reveal" id="confirmacion" aria-label="Confirmación de asistencia">
+            <div class="info-label anim-item">Confirmación de Asistencia</div>
+            <div class="anim-item" style="font-family: 'Montserrat', sans-serif; font-size: 14px; color: var(--text-muted); margin-bottom: 15px;">Agradeceremos tu confirmación lo antes posible.</div>
+            <div class="form-container anim-item">
                 <input type="text" id="rsvp-name" class="form-input" placeholder="Escribe tu nombre completo">
                 
                 <select id="rsvp-status" class="form-input" onchange="toggleGuestInput()">
@@ -1047,21 +1092,24 @@
                 
                 <button onclick="sendRSVP()" class="btn-gold">Confirmar por WhatsApp</button>
             </div>
+        </section>
 
-            <div class="divider"></div>
-
-            <!-- Muro de Deseos -->
-            <div class="info-label">Deja un mensaje para Sophia</div>
-            <div class="form-container">
+        <!-- ============ SECCIÓN: MURO DE DESEOS ============ -->
+        <section class="glass-panel panel-dark reveal" id="deseos" aria-label="Muro de deseos">
+            <div class="info-label anim-item">Deja un mensaje para Sophia</div>
+            <div class="form-container anim-item">
                 <input type="text" id="wish-name" class="form-input" placeholder="Tu Nombre">
                 <textarea id="wish-message" class="form-input" placeholder="Escribe tus buenos deseos para la quinceañera..."></textarea>
                 <button onclick="sendWish()" class="btn-gold">Enviar Mensaje</button>
             </div>
+        </section>
 
-            <div style="font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 2px; color: var(--gold-secondary); margin-top: 40px;">
+        <!-- ============ SECCIÓN: PIE DE PÁGINA ============ -->
+        <section class="glass-panel reveal" id="pie-pagina" style="padding: 15px; background: transparent; box-shadow: none; border: none;" aria-label="Pie de página">
+            <div class="anim-item" style="font-family: 'Cinzel', serif; font-size: 12px; letter-spacing: 2px; color: var(--gold-secondary);">
                 INVYTIA PREMIUM PREVIEW
             </div>
-        </div>
+        </section>
     </main>
 
     <!-- Estructura Lightbox -->
@@ -1101,7 +1149,7 @@
                 document.body.classList.add('content-active');
                 createFireflies();
                 
-                // Activar las animaciones reveal visibles al cargar
+                // Activar el sistema de revelado de secciones
                 revealElements();
 
                 bgMusic.play().then(() => {
@@ -1115,20 +1163,56 @@
             }, 1200);
         }
 
-        // Lógica de Intersection Observer para animaciones On-Scroll
-        function revealElements() {
-            const reveals = document.querySelectorAll('.reveal');
-            const windowHeight = window.innerHeight;
-            const elementVisible = 100;
-
-            reveals.forEach((reveal) => {
-                const elementTop = reveal.getBoundingClientRect().top;
-                if (elementTop < windowHeight - elementVisible) {
-                    reveal.classList.add('active');
-                }
+        // --- ANIMACIÓN LETRA POR LETRA DEL TÍTULO PRINCIPAL ---
+        function wrapTitleLetters() {
+            const title = document.querySelector('.main-title');
+            if (!title) return;
+            const text = title.textContent;
+            title.innerHTML = '';
+            [...text].forEach((ch) => {
+                const span = document.createElement('span');
+                span.className = 'letter';
+                span.textContent = ch === ' ' ? '\u00A0' : ch;
+                title.appendChild(span);
             });
         }
-        window.addEventListener('scroll', revealElements);
+        wrapTitleLetters();
+
+        // --- SISTEMA DE REVELADO DE SECCIONES Y TEXTO ---
+        // Usa IntersectionObserver (no depende del evento 'scroll', que en
+        // algunos navegadores/vistas embebidas puede no dispararse siempre).
+        // Al activarse una sección, sus elementos .anim-item y las letras del
+        // título (si aplica) reciben un pequeño desfase para animarse en cascada.
+        const revealObserver = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    const items = entry.target.querySelectorAll('.anim-item');
+                    items.forEach((item, i) => {
+                        item.style.transitionDelay = `${i * 0.12}s`;
+                    });
+
+                    const letters = entry.target.querySelectorAll('.main-title .letter');
+                    letters.forEach((letter, i) => {
+                        letter.style.animationDelay = `${i * 0.045}s`;
+                    });
+
+                    entry.target.classList.add('active');
+                    revealObserver.unobserve(entry.target);
+                }
+            });
+        }, {
+            threshold: 0.15,
+            rootMargin: '0px 0px -60px 0px'
+        });
+
+        function revealElements() {
+            document.querySelectorAll('.reveal').forEach((el) => revealObserver.observe(el));
+            // Respaldo de seguridad: si por cualquier motivo el observer no
+            // llegara a activar algún panel, se muestra igualmente a los 4s.
+            setTimeout(() => {
+                document.querySelectorAll('.reveal:not(.active)').forEach((el) => el.classList.add('active'));
+            }, 4000);
+        }
 
         // Sistema de Luciérnagas Flotantes
         function createFireflies() {
@@ -1182,76 +1266,31 @@
             document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
         }, 1000);
 
-        // --- SISTEMA DE PASES DIGITALES (BUSCADOR) ---
-        // Se mantiene la base de datos de invitados de ejemplo
-        const guestData = {"Abigail Osorio": 3, "Abuelita Alicia": 1, "Abuelito Javier": 2, "Abuelito José Luis": 2, "Adriana Manríquez": 2, "Adrián Gonzales": 2, "Adrián López": 4, "Alberto Cerecer": 3, "Alejandro Miguel": 5, "Alexis Cruz": 4, "Alfonso": 2, "Amaya Rojo": 1, "Angelica": 4, "Antonio Pérez": 5, "Araceli Zaimez": 2, "Aranza": 1, "Aristeo": 4, "Barut López": 4, "Beatriz": 2, "Beatriz Tobon": 3, "Belén Galicia": 1, "Cesar Pimentel": 2, "Chirris": 1, "Claudia Sánchez": 2, "César Miguel": 1, "Dagoberto Reyes": 2, "Dalvi Miguel": 1, "Diana López": 8, "Dianey": 1, "Donaciano Antonio": 2, "Dulce Susana": 2, "Edwin Valdez": 2, "Enrique Cruz": 3, "Enrique López": 4, "Erick": 2, "Ernesto Salinas": 3, "Esther Cruz": 4, "Esther Reyes": 1, "Estrella": 3, "Ethan Ernesto": 1, "Eustaquio Cruz": 5, "Eustolia González": 5, "Evelin Cruz": 4, "Federico Francisco": 5, "Fernanda": 1, "Flavio  Jiménez": 3, "Francisco Miguel": 4, "Frida": 1, "Fulgencio Martín": 4, "Félix Gonzales": 5, "Félix Torrijos": 4, "Gabriel": 1, "Gabriela Peralta": 1, "Gerardo": 4, "Gina Díaz Reyes": 2, "Golla": 1, "Griselda Pérez": 4, "Gudelia Miguel": 2, "Hector  Vargas": 6, "Humberto Meléndez Pacheco": 2, "Héctor": 1, "Héctor Valdez": 3, "Isaac Alvarado": 2, "Ismael Cruz": 3, "Ismael Zamudio": 2, "Jaime Ramos": 4, "Jair": 2, "Janett": 4, "Javier Jiménez": 2, "Javier Mendoza": 4, "Jazz Raya": 4, "Jenni Santos": 4, "Jessi Cruz": 2, "Jesús": 1, "Joel Jiménez": 2, "Jorge": 2, "Jorge Valdez": 5, "Jose Carmen Tafolla": 6, "Josefina Méndez": 5, "Joselin": 3, "Josué": 2, "Juan Carlos Jiménez": 2, "Juan Ramirez": 4, "Juan Vargas": 2, "Julieta": 1, "Juventino Cruz": 2, "Karina Miguel": 1, "Lucero González": 4, "Luis Alberto": 2, "Luis Alberto Jiménez": 3, "Luis Bolaños": 4, "Luis Mendoza": 3, "Luis Ávalos Estrada": 4, "Magdalena Jiménez": 3, "Maitechu Rangel": 5, "Marco A.": 3, "Marco A.  Miguel": 3, "Marco Arana": 2, "Marcos Cruz": 5, "Margarita": 5, "Martha Villagran": 1, "Martín Retana": 4, "Maurilio Cruz": 4, "Max": 1, "Mayra": 4, "Mireya": 3, "Noemí Cruz": 2, "Noé Ferrer": 1, "Omar  López": 1, "Onesimo": 5, "Paula Gonzales": 7, "Pina": 1, "Ramiro  Reyes": 2, "Raúl   Reyes": 1, "Regina": 1, "Renata Piña": 1, "Renatita": 1, "Ricardo Bautista": 2, "Ricardo Cruz": 4, "Rodolfo López": 2, "Rosalba Reyes": 3, "Roy Ortiz": 3, "Rutilio  Jiménez": 10, "Said Flores": 1, "Samantha Ponce": 1, "Sara Aletia": 1, "Sebastián Reyes": 5, "Sergio Bautista": 2, "Silvia Galvan": 4, "Silvia Reyes": 8, "Susana Jiménez": 3, "Tabata Denisse Robles": 5, "Tais": 1, "Tomasa Miguel": 2, "Ulises Eduardo Gonzales": 4, "Valeria": 1, "Venancio Cruz": 2, "Victoria": 1, "Víctor Reyes": 5, "Wenceslao Ferrer": 3, "Yahel": 1, "Yaz": 2, "Yazmín Gonzales": 2, "Álvaro López": 2};
+        // --- SISTEMA DE PASES DIGITALES POR ENLACE ---
+        // La sección de pases permanece oculta (display:none) por defecto.
+        // Solo se muestra si la URL trae ?p=N, con N entero entre 1 y 6,
+        // y en ese caso el pase se llena automáticamente con N pases.
+        // Ejemplos:
+        //   invitacion.html            -> no muestra nada de pases
+        //   invitacion.html?p=1        -> muestra pase para 1 persona
+        //   invitacion.html?p=6        -> muestra pase para 6 personas
+        function initPasses() {
+            const params = new URLSearchParams(window.location.search);
+            const raw = params.get('p');
+            const p = parseInt(raw, 10);
+            const section = document.getElementById('pases');
+            const countEl = document.getElementById('ticket-count');
 
-        // Función para quitar acentos y normalizar texto
-        function normalizeString(str) {
-            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
-        }
+            const esValido = raw !== null && Number.isInteger(p) && String(p) === raw.trim() && p >= 1 && p <= 6;
 
-        // Mostrar Pases y Animar Ticket
-        function searchPasses() {
-            const searchInput = document.getElementById("guest-search").value;
-            const errorMsg = document.getElementById("search-error");
-            const container = document.getElementById("ticket-container");
-            const nameEl = document.getElementById("ticket-name");
-            const countEl = document.getElementById("ticket-count");
-            const ticketElement = document.querySelector(".digital-ticket");
-
-            if (searchInput.length < 2) {
-                errorMsg.style.display = "block";
-                errorMsg.textContent = "Por favor, escribe un nombre válido.";
-                container.style.display = "none";
-                return;
-            }
-
-            const normalizedInput = normalizeString(searchInput);
-            let foundName = null;
-            let foundPasses = 0;
-
-            // 1. Intentar coincidencia exacta
-            for (const [name, passes] of Object.entries(guestData)) {
-                if (normalizeString(name) === normalizedInput) {
-                    foundName = name;
-                    foundPasses = passes;
-                    break;
-                }
-            }
-
-            // 2. Si no es exacta, intentar encontrar si parte del nombre coincide
-            if (!foundName) {
-                const matches = [];
-                for (const [name, passes] of Object.entries(guestData)) {
-                    if (normalizeString(name).includes(normalizedInput)) {
-                        matches.push({name, passes});
-                    }
-                }
-                
-                if (matches.length === 1) {
-                    foundName = matches[0].name;
-                    foundPasses = matches[0].passes;
-                }
-            }
-            
-            if (foundName) {
-                errorMsg.style.display = "none";
-                nameEl.textContent = foundName;
-                countEl.textContent = foundPasses + (foundPasses == 1 ? " PASE" : " PASES");
-                
-                container.style.display = "block";
-                
-                // Reiniciar animación
-                ticketElement.style.animation = 'none';
-                ticketElement.offsetHeight; // trigger reflow
-                ticketElement.style.animation = null; 
+            if (esValido) {
+                countEl.textContent = p + (p === 1 ? " PASE" : " PASES");
+                section.style.display = 'block';
             } else {
-                errorMsg.style.display = "block";
-                errorMsg.textContent = "No encontramos este nombre. Intenta con un solo nombre y tu primer apellido.";
-                container.style.display = "none";
+                section.style.display = 'none';
             }
         }
+        initPasses();
 
         // Mostrar/Ocultar campo de cantidad de personas
         function toggleGuestInput() {
