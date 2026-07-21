@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mis XV Años - Sophia Abigail</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Pinyon+Script&family=Montserrat:wght@300;400;500&family=Cormorant+Garamond:ital,wght@0,400;1,400;1,600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #071912;
+            --gold-primary: #dfba6b;
+            --gold-secondary: #c5a059;
+            --text-light: #f4f0e6;
+            --text-muted: #a3b8b0;
+            --magic-glow: rgba(223, 186, 107, 0.4);
+            --firefly-glow: rgba(173, 255, 47, 0.6);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            font-family: 'Montserrat', sans-serif;
+            background-color: var(--bg-dark);
+            color: var(--text-light);
+            overflow-x: hidden;
+            scroll-behavior: smooth;
+        }
+
+        /* Capa de Fondo Fija para el Cuerpo de la Invitación */
+        #fixed-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: url('assets/cuerpo.jpg') no-repeat center center;
+            background-size: cover;
+            z-index: 0;
+            opacity: 0;
+            transition: opacity 1.5s ease-out 0.6s;
+        }
+
+        body.content-active #fixed-bg {
+            opacity: 1;
+        }
+
+        /* Estilos del Sobre Animado */
+        #envelope-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('assets/fondo.jpg') no-repeat center center;
+            background-size: cover;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 1.2s ease-in-out, visibility 1.2s;
+            overflow: hidden;
+        }
+
+        /* Capa oscura sobre el fondo del sobre para legibilidad */
+        #envelope-screen::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(7, 25, 18, 0.7);
+            z-index: 0;
+        }
+
+        #envelope-screen.fade-out {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .envelope-wrapper {
+            position: relative;
+            cursor: pointer;
+            transform: scale(0.9);
+            transition: transform 0.5s ease;
+            z-index: 1;
+        }
+
+        .envelope-wrapper:hover {
+            transform: scale(0.95);
+        }
+
+        .envelope {
+            position: relative;
+            width: 340px;
+            height: 240px;
+            background: #0d2e22;
+            border-radius: 0 0 8px 8px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.6);
+            border: 1px solid rgba(223, 186, 107, 0.15);
+        }
+
+        .envelope::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 0;
+            height: 0;
+            border-right: 170px solid #113a2b;
+            border-top: 120px solid transparent;
+            border-bottom: 120px solid #113a2b;
+            border-radius: 0 0 8px 0;
+            z-index: 2;
+        }
+
+        .envelope::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 170px solid #144433;
+            border-top: 120px solid transparent;
+            border-bottom: 120px solid #144433;
+            border-radius: 0 0 0 8px;
+            z-index: 2;
+        }
+
+        .front-flap {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 0;
+            border-left: 170px solid transparent;
+            border-right: 170px solid transparent;
+            border-top: 130px solid #184f3b;
+            transform-origin: top;
+            transition: transform 0.6s ease 0.2s;
+            z-index: 4;
+        }
+
+        .envelope-wrapper.open .front-flap {
+            transform: rotateX(180deg);
+            z-index: 1;
+        }
+
+        .wax-seal {
+            position: absolute;
+            top: 110px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 60px;
+            background: radial-gradient(circle, #dfba6b 0%, #a67c1e 100%);
+            border-radius: 50%;
+            z-index: 5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.5), inset 0 2px 4px rgba(255,255,255,0.3);
+            transition: transform 0.4s ease, opacity 0.4s ease 0.4s;
+        }
+
+        .wax-seal svg {
+            width: 32px;
+            height: 32px;
+            fill: #4a3605;
+        }
+
+        .envelope-wrapper.open .wax-seal {
+            transform: translateX(-50%) scale(0);
+            opacity: 0;
+        }
+
+        .envelope-text {
+            position: absolute;
+            bottom: -50px;
+            width: 100%;
+            text-align: center;
+            font-family: 'Cinzel', serif;
+            font-size: 14px;
+            color: var(--gold-primary);
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.8);
+        }
+
+        .hint-text {
+            position: absolute;
+            bottom: -80px;
+            width: 100%;
+            text-align: center;
+            font-family: 'Montserrat', sans-serif;
+            font-size: 11px;
+            color: var(--text-muted);
+            letter-spacing: 1px;
+            opacity: 0.7;
+            animation: pulse 2s infinite;
+        }
+
+        /* Contenido Principal */
+        #main-invitation {
+            min-height: 100vh;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 40px 15px;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 1.5s ease-out 0.6s, transform 1.5s ease-out 0.6s;
+            z-index: 2;
+        }
+
+        body.content-active #main-invitation {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Diseño de Paneles Intercalados (Glassmorphism y Solidos) */
+        .glass-panel {
+            max-width: 550px;
+            width: 100%;
+            padding: 40px 25px;
+            text-align: center;
+            position: relative;
+            margin-bottom: 30px;
+            border-radius: 12px;
+            z-index: 3;
+        }
+
+        .panel-dark {
+            background: rgba(7, 25, 18, 0.9); 
+            border: 1px solid var(--gold-secondary);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(8px);
+        }
+
+        .panel-light {
+            background: rgba(223, 186, 107, 0.1); 
+            border: 1px solid rgba(223, 186, 107, 0.4);
+            box-shadow: inset 0 0 20px rgba(223, 186, 107, 0.05), 0 10px 30px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(12px);
+        }
+
+        /* Animaciones de Scroll Continúas (Reveal) */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s ease-out;
+        }
+
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .lotus-header { margin-bottom: 20px; }
+        .lotus-header svg {
+            width: 60px;
+            height: 60px;
+            fill: var(--gold-primary);
+            filter: drop-shadow(0 0 8px var(--magic-glow));
+        }
+
+        .section-tag {
+            font-family: 'Cinzel', serif;
+            font-size: 13px;
+            letter-spacing: 5px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .main-title {
+            font-family: 'Pinyon Script', cursive;
+            font-size: 70px;
+            color: var(--gold-primary);
+            margin-bottom: 25px;
+            text-shadow: 0 2px 10px rgba(223, 186, 107, 0.3);
+            line-height: 1.1;
+        }
+
+        .hero-image-container {
+            width: 100%;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 2px solid var(--gold-primary);
+            margin-bottom: 30px;
+            box-shadow: 0 0 25px rgba(223, 186, 107, 0.2);
+        }
+
+        .hero-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Imágenes de Galería (1 a 11) */
+        .gallery-photo {
+            width: 100%;
+            border-radius: 6px;
+            border: 1px solid rgba(223, 186, 107, 0.5);
+            margin: 20px 0;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .gallery-photo:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 20px var(--magic-glow);
+        }
+
+        .phrase {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 20px;
+            color: var(--text-light);
+            line-height: 1.6;
+            margin-bottom: 20px;
+            padding: 0 10px;
+            font-style: italic;
+        }
+
+        .phrase-bold {
+            font-style: normal;
+            font-weight: 600;
+            color: var(--gold-primary);
+            font-size: 19px;
+            display: block;
+            margin-top: 10px;
+        }
+
+        .divider {
+            width: 60px;
+            height: 1px;
+            background: linear-gradient(to right, transparent, var(--gold-primary), transparent);
+            margin: 30px auto;
+        }
+
+        .info-label {
+            font-family: 'Cinzel', serif;
+            font-size: 12px;
+            letter-spacing: 3px;
+            color: var(--gold-primary);
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .info-value-main {
+            font-family: 'Cinzel', serif;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--text-light);
+            letter-spacing: 2px;
+        }
+
+        .names-list {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 24px;
+            color: var(--text-light);
+            margin: 8px 0;
+            letter-spacing: 1px;
+        }
+
+        /* Cuenta Regresiva */
+        .countdown-container {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .countdown-box {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(223, 186, 107, 0.4);
+            border-radius: 8px;
+            padding: 12px;
+            width: 70px;
+            box-shadow: inset 0 0 10px rgba(0,0,0,0.5);
+        }
+
+        .countdown-number {
+            font-family: 'Cinzel', serif;
+            font-size: 26px;
+            color: var(--gold-primary);
+            font-weight: bold;
+        }
+
+        .countdown-label {
+            font-size: 11px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+            margin-top: 5px;
+            letter-spacing: 1px;
+        }
+
+        /* Calendario */
+        .calendar-container {
+            max-width: 320px;
+            margin: 0 auto 20px auto;
+            background: rgba(0,0,0,0.3);
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid rgba(223, 186, 107, 0.3);
+        }
+
+        .calendar-month {
+            font-family: 'Cinzel', serif;
+            font-size: 18px;
+            color: var(--gold-primary);
+            margin-bottom: 15px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 6px;
+            font-size: 14px;
+        }
+
+        .calendar-day-header {
+            color: var(--text-muted);
+            font-weight: bold;
+            padding-bottom: 5px;
+            border-bottom: 1px solid rgba(223, 186, 107, 0.2);
+        }
+
+        .calendar-day {
+            padding: 6px 0;
+            color: var(--text-light);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            aspect-ratio: 1;
+        }
+
+        .calendar-day.active {
+            background-color: var(--gold-primary);
+            color: var(--bg-dark);
+            border-radius: 50%;
+            font-weight: bold;
+            box-shadow: 0 0 10px var(--magic-glow);
+        }
+
+        .calendar-day.empty { color: transparent; }
+
+        /* Botones Generales */
+        .btn-gold {
+            display: inline-block;
+            background: transparent;
+            color: var(--gold-primary);
+            border: 1px solid var(--gold-primary);
+            padding: 14px 25px;
+            font-family: 'Cinzel', serif;
+            font-size: 13px;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .btn-gold:hover {
+            background: var(--gold-primary);
+            color: var(--bg-dark);
+            box-shadow: 0 0 15px var(--magic-glow);
+        }
+
+        /* Mapas */
+        .map-container {
+            width: 100%;
+            height: 280px;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            border: 2px solid rgba(223, 186, 107, 0.4);
+            border-radius: 5px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .map-container iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            filter: grayscale(80%) invert(90%) hue-rotate(180deg);
+        }
+
+        /* Formularios */
+        .form-container {
+            margin-top: 15px;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(223, 186, 107, 0.4);
+            color: var(--text-light);
+            font-family: 'Montserrat', sans-serif;
+            border-radius: 4px;
+            outline: none;
+            transition: border 0.3s;
+        }
+
+        .form-input:focus {
+            border-color: var(--gold-primary);
+        }
+
+        .form-input::placeholder {
+            color: rgba(163, 184, 176, 0.6);
+        }
+        
+        select.form-input option {
+            background: var(--bg-dark);
+            color: var(--text-light);
+            padding: 10px;
+        }
+
+        textarea.form-input {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        /* Ticket Digital Pase VIP */
+        .digital-ticket {
+            background: linear-gradient(135deg, #0d2e22 0%, #081d15 100%);
+            border: 1px solid var(--gold-primary);
+            border-radius: 12px;
+            padding: 25px 15px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.8);
+            margin: 0 auto;
+            max-width: 320px;
+            animation: fadeInTicket 0.8s ease-out forwards;
+        }
+
+        @keyframes fadeInTicket {
+            from { opacity: 0; transform: scale(0.9) translateY(-10px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        .digital-ticket::before, .digital-ticket::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: #06140e; 
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            border: 1px solid var(--gold-primary);
+        }
+        .digital-ticket::before {
+            left: -20px;
+            border-left-color: transparent;
+            border-top-color: transparent;
+            border-bottom-color: transparent;
+        }
+        .digital-ticket::after {
+            right: -20px;
+            border-right-color: transparent;
+            border-top-color: transparent;
+            border-bottom-color: transparent;
+        }
+
+        .ticket-header {
+            font-family: 'Cinzel', serif;
+            font-size: 15px;
+            color: var(--text-muted);
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            border-bottom: 1px dashed rgba(223, 186, 107, 0.3);
+            padding-bottom: 15px;
+        }
+
+        .ticket-body { padding: 10px 0; }
+
+        .ticket-footer {
+            font-size: 10px;
+            color: var(--gold-secondary);
+            margin-top: 15px;
+            border-top: 1px dashed rgba(223, 186, 107, 0.3);
+            padding-top: 15px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Luciérnagas Animadas */
+        #fireflies-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            pointer-events: none;
+            z-index: 100;
+            overflow: hidden;
+        }
+
+        .firefly {
+            position: absolute;
+            background-color: #adff2f;
+            border-radius: 50%;
+            pointer-events: none;
+            box-shadow: 0 0 10px 4px var(--firefly-glow);
+            animation: float-around infinite ease-in-out;
+            opacity: 0;
+        }
+
+        /* Sticky Music Button */
+        #music-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 55px;
+            height: 55px;
+            background: rgba(7, 25, 18, 0.85);
+            border: 2px solid var(--gold-secondary);
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            cursor: pointer;
+            box-shadow: 0 0 15px var(--magic-glow);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.8);
+        }
+
+        body.content-active #music-btn {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+        }
+
+        #music-btn:hover {
+            background: rgba(223, 186, 107, 0.2);
+            transform: scale(1.1);
+        }
+
+        #music-btn svg {
+            width: 26px;
+            height: 26px;
+            fill: var(--gold-primary);
+        }
+
+        /* Lightbox para imágenes a pantalla completa */
+        #lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 3000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        #lightbox.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        #lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            border: 2px solid var(--gold-primary);
+            border-radius: 8px;
+            box-shadow: 0 0 30px rgba(223, 186, 107, 0.3);
+        }
+
+        .close-lightbox {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            font-size: 40px;
+            color: var(--gold-primary);
+            cursor: pointer;
+            z-index: 3001;
+        }
+
+        /* Animaciones */
+        @keyframes pulse {
+            0% { opacity: 0.4; }
+            50% { opacity: 0.9; }
+            100% { opacity: 0.4; }
+        }
+
+        @keyframes float-around {
+            0% { transform: translateY(0) translateX(0) scale(0.5); opacity: 0; }
+            10% { opacity: 0.7; }
+            90% { opacity: 0.7; }
+            100% { transform: translateY(-100vh) translateX(50px) scale(1.2); opacity: 0; }
+        }
+
+        /* Responsivo */
+        @media (max-width: 400px) {
+            .envelope { width: 290px; height: 210px; }
+            .envelope::before { border-right-width: 145px; border-top-width: 105px; border-bottom-width: 105px; }
+            .envelope::after { border-left-width: 145px; border-top-width: 105px; border-bottom-width: 105px; }
+            .front-flap { border-left-width: 145px; border-right-width: 145px; border-top-width: 115px; }
+            .wax-seal { top: 95px; }
+            .main-title { font-size: 55px; }
+            .glass-panel { padding: 30px 15px; }
+            .names-list { font-size: 22px; }
+            .countdown-box { width: 60px; padding: 10px; }
+            .countdown-number { font-size: 22px; }
+            #music-btn { bottom: 20px; right: 20px; width: 45px; height: 45px; }
+            #music-btn svg { width: 20px; height: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Capa de Fondo Estática -->
+    <div id="fixed-bg"></div>
+
+    <!-- Contenedor para las luciérnagas dinámicas -->
+    <div id="fireflies-container"></div>
+
+    <!-- Audio de Fondo -->
+    <audio id="bg-music" src="assets/song.mp3" loop></audio>
+
+    <!-- Botón Sticky de Música -->
+    <button id="music-btn" onclick="toggleMusic()" aria-label="Reproducir/Pausar Música">
+        <svg viewBox="0 0 24 24">
+            <path d="M8 5v14l11-7z"/>
+        </svg>
+    </button>
+
+    <!-- Pantalla del Sobre -->
+    <div id="envelope-screen">
+        <div class="envelope-wrapper" onclick="openEnvelope()">
+            <div class="front-flap"></div>
+            <div class="wax-seal">
+                <svg viewBox="0 0 24 24">
+                    <path d="M5 16L3 5L8.5 10L12 4L15.5 10L21 5L19 16H5M19 19C19 19.55 18.55 20 18 20H6C5.45 20 5 19.55 5 19V18H19V19Z"/>
+                </svg>
+            </div>
+            <div class="envelope"></div>
+            <div class="envelope-text">Mis XV Años<br><span style="color: #fff; font-size: 14px; letter-spacing: 4px;">Sophia Abigail</span></div>
+            <div class="hint-text">Toca el sello para abrir</div>
+        </div>
+    </div>
+
+    <!-- Contenido de la Invitación Principal -->
+    <main id="main-invitation">
+        
+        <!-- PANEL 1: Hero y Fecha (Oscuro) -->
+        <div class="glass-panel panel-dark reveal">
+            <div class="lotus-header">
+                <svg viewBox="0 0 24 24">
+                    <path d="M5 16L3 5L8.5 10L12 4L15.5 10L21 5L19 16H5M19 19C19 19.55 18.55 20 18 20H6C5.45 20 5 19.55 5 19V18H19V19Z"/>
+                </svg>
+            </div>
+
+            <div class="section-tag">Mis XV Años</div>
+            <h1 class="main-title">Sophia Abigail</h1>
+
+            <div class="hero-image-container">
+                <img src="assets/hero.jpg" alt="Sophia Abigail">
+            </div>
+            
+            <p class="phrase">
+                "Los sueños se cumplen, y hoy uno de los míos se hace realidad, con la bendición de Dios y el amor de mi familia."
+            </p>
+
+            <div class="divider"></div>
+
+            <div class="info-label">Fecha del Evento</div>
+            <div class="info-value-main" style="color: var(--gold-primary);">7 de Noviembre</div>
+            
+            <!-- Cuenta Regresiva -->
+            <div class="countdown-container">
+                <div class="countdown-box">
+                    <div class="countdown-number" id="days">00</div>
+                    <div class="countdown-label">Días</div>
+                </div>
+                <div class="countdown-box">
+                    <div class="countdown-number" id="hours">00</div>
+                    <div class="countdown-label">Hrs</div>
+                </div>
+                <div class="countdown-box">
+                    <div class="countdown-number" id="minutes">00</div>
+                    <div class="countdown-label">Min</div>
+                </div>
+                <div class="countdown-box">
+                    <div class="countdown-number" id="seconds">00</div>
+                    <div class="countdown-label">Seg</div>
+                </div>
+            </div>
+
+            <!-- Widget Calendario Noviembre 2026 -->
+            <div class="calendar-container">
+                <div class="calendar-month">Noviembre</div>
+                <div class="calendar-grid">
+                    <div class="calendar-day-header">D</div>
+                    <div class="calendar-day-header">L</div>
+                    <div class="calendar-day-header">M</div>
+                    <div class="calendar-day-header">M</div>
+                    <div class="calendar-day-header">J</div>
+                    <div class="calendar-day-header">V</div>
+                    <div class="calendar-day-header">S</div>
+                    
+                    <div class="calendar-day">1</div>
+                    <div class="calendar-day">2</div>
+                    <div class="calendar-day">3</div>
+                    <div class="calendar-day">4</div>
+                    <div class="calendar-day">5</div>
+                    <div class="calendar-day">6</div>
+                    <div class="calendar-day active">7</div>
+                    <div class="calendar-day">8</div>
+                    <div class="calendar-day">9</div>
+                    <div class="calendar-day">10</div>
+                    <div class="calendar-day">11</div>
+                    <div class="calendar-day">12</div>
+                    <div class="calendar-day">13</div>
+                    <div class="calendar-day">14</div>
+                    <div class="calendar-day">15</div>
+                    <div class="calendar-day">16</div>
+                    <div class="calendar-day">17</div>
+                    <div class="calendar-day">18</div>
+                    <div class="calendar-day">19</div>
+                    <div class="calendar-day">20</div>
+                    <div class="calendar-day">21</div>
+                    <div class="calendar-day">22</div>
+                    <div class="calendar-day">23</div>
+                    <div class="calendar-day">24</div>
+                    <div class="calendar-day">25</div>
+                    <div class="calendar-day">26</div>
+                    <div class="calendar-day">27</div>
+                    <div class="calendar-day">28</div>
+                    <div class="calendar-day">29</div>
+                    <div class="calendar-day">30</div>
+                    <div class="calendar-day empty"></div>
+                    <div class="calendar-day empty"></div>
+                    <div class="calendar-day empty"></div>
+                    <div class="calendar-day empty"></div>
+                    <div class="calendar-day empty"></div>
+                </div>
+            </div>
+
+            <a href="https://calendar.google.com/calendar/render?action=TEMPLATE&text=XV+A%C3%B1os+de+Sophia+Abigail&dates=20261107T233000Z/20261108T060000Z&details=Celebremos+juntos+este+d%C3%ADa+tan+especial" target="_blank" class="btn-gold" style="width: auto;">
+                Agregar al Calendario
+            </a>
+        </div>
+
+        <!-- FOTO INTERCALADA 1 -->
+        <div class="glass-panel panel-light reveal" style="padding: 20px;">
+            <img src="assets/foto1.jpg" alt="Foto 1" class="gallery-photo" onclick="openLightbox('assets/foto1.jpg')">
+            <img src="assets/foto2.jpg" alt="Foto 2" class="gallery-photo" onclick="openLightbox('assets/foto2.jpg')">
+        </div>
+
+        <!-- PANEL 2: Padres y Padrinos (Oscuro) -->
+        <div class="glass-panel panel-dark reveal">
+            <div class="info-label">Con la bendición de Dios y de mi madre</div>
+            <div class="names-list">Ximena Barrera Rodríguez</div>
+            
+            <div class="divider"></div>
+
+            <div class="info-label">Mis Padrinos</div>
+            <div class="names-list">Gustavo Mendoza</div>
+            <div class="names-list">Gabriela Mendoza</div>
+        </div>
+
+        <!-- FOTOS INTERCALADAS -->
+        <div class="glass-panel panel-light reveal" style="padding: 20px;">
+            <img src="assets/foto3.jpg" alt="Foto 3" class="gallery-photo" onclick="openLightbox('assets/foto3.jpg')">
+            <img src="assets/foto4.jpg" alt="Foto 4" class="gallery-photo" onclick="openLightbox('assets/foto4.jpg')">
+        </div>
+
+        <!-- PANEL 3: Ubicación (Oscuro) -->
+        <div class="glass-panel panel-dark reveal">
+            <div class="info-label" style="font-size: 16px;">Ceremonia y Recepción</div>
+            <div class="names-list" style="margin-top: 15px;">Palacio La Rochelle</div>
+            <div class="names-list" style="font-size: 20px;">Salón Candiles 1</div>
+            
+            <div class="divider" style="margin: 20px auto; width: 40px;"></div>
+
+            <div style="display: flex; justify-content: space-around; margin-bottom: 20px;">
+                <div>
+                    <div class="info-label">Recepción</div>
+                    <div style="font-size: 24px; color: var(--gold-primary); font-family: 'Cinzel', serif; font-weight: bold;">6:30 PM</div>
+                </div>
+                <div>
+                    <div class="info-label">Ceremonia</div>
+                    <div style="font-size: 24px; color: var(--gold-primary); font-family: 'Cinzel', serif; font-weight: bold;">7:00 PM</div>
+                </div>
+            </div>
+
+            <div class="map-container">
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3764.6659995954574!2d-99.19666691734592!3d19.340294397021516!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x85d20001bee8346d%3A0x9f9d0e0bee818bcb!2sPalacio%20La%20Rochelle%20San%20%C3%81ngel!5e0!3m2!1ses-419!2smx!4v1784593868507!5m2!1ses-419!2smx" allowfullscreen="" loading="lazy" referrerpolicy="strict-origin-when-cross-origin"></iframe>
+            </div>
+            <a href="https://maps.app.goo.gl/bdK6rRJMWqfDh3db8" target="_blank" class="btn-gold">Ver Ubicación en Mapa</a>
+        </div>
+
+        <!-- FOTOS INTERCALADAS -->
+        <div class="glass-panel panel-light reveal" style="padding: 20px;">
+            <img src="assets/foto5.jpg" alt="Foto 5" class="gallery-photo" onclick="openLightbox('assets/foto5.jpg')">
+            <img src="assets/foto6.jpg" alt="Foto 6" class="gallery-photo" onclick="openLightbox('assets/foto6.jpg')">
+        </div>
+
+        <!-- PANEL 4: Detalles (Oscuro) -->
+        <div class="glass-panel panel-dark reveal">
+            <!-- Código de Vestimenta -->
+            <div class="info-label">Código de Vestimenta</div>
+            <div class="info-value-main" style="font-size: 22px; margin-bottom: 5px;">Formal</div>
+            <div style="font-family: 'Montserrat', sans-serif; font-size: 12px; color: var(--text-muted); padding: 0 10px;">(Favor de reservar el color <span style="color: #a4de8b; font-weight: 500;">verde</span> para la quinceañera)</div>
+
+            <div class="divider"></div>
+
+            <!-- Mesa de Regalos / Lluvia de Sobres / Amazon -->
+            <div class="info-label">Si Quieres Hacerme Un Regalo</div>
+            
+            <svg viewBox="0 0 24 24" style="width: 50px; height: 50px; fill: var(--gold-primary); margin: 15px 0; filter: drop-shadow(0 0 5px var(--magic-glow));">
+                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2zm16 2H4v1.97l8 4.66 8-4.66V6zm0 12v-8.46l-8 4.66-8-4.66V18h16z"/>
+            </svg>
+            
+            <div class="info-value-main" style="font-size: 20px; margin-bottom: 10px;">Lluvia de Sobres</div>
+            <div style="font-family: 'Montserrat', sans-serif; font-size: 13px; color: var(--text-muted); padding: 0 10px;">
+                Es la tradición de regalar dinero en efectivo a la festejada el día del evento, el cual se deposita en un buzón especial en la recepción.
+            </div>
+
+            <div style="margin: 25px 0;">
+                <span style="font-family: 'Cinzel', serif; font-size: 14px; color: var(--gold-secondary); letter-spacing: 2px;">O BIEN</span>
+            </div>
+
+            <div class="info-value-main" style="font-size: 20px; margin-bottom: 10px;">Mesa de Regalos</div>
+            <div style="font-family: 'Montserrat', sans-serif; font-size: 13px; color: var(--text-muted); padding: 0 10px; margin-bottom: 20px;">
+                También he preparado una lista de deseos en Amazon con algunas cosas que me encantarían. ¡Agradezco mucho tu cariño!
+            </div>
+            <a href="https://www.amazon.com.mx/hz/wishlist/ls/S8LAE7R2VWUQ?ref_=wl_share" target="_blank" class="btn-gold" style="width: auto;">Ver Mesa de Regalos en Amazon</a>
+            
+            <div class="divider"></div>
+
+            <!-- Galería en Vivo -->
+            <div class="info-label">Comparte tus Momentos</div>
+            <div style="font-family: 'Montserrat', sans-serif; font-size: 13px; color: var(--text-muted); padding: 0 10px; margin-bottom: 20px;">
+                Toma muchas fotos durante la fiesta y súbelas a nuestra carpeta compartida para que todos podamos disfrutar esos bonitos recuerdos.
+            </div>
+            <a href="https://drive.google.com/drive/folders/19dQJYYbfVPX6Yb47ZJJEk8o0sSjDKjhH?usp=sharing" target="_blank" class="btn-gold" style="width: auto;">Abrir Galería en Vivo</a>
+        </div>
+
+        <!-- FOTOS INTERCALADAS -->
+        <div class="glass-panel panel-light reveal" style="padding: 20px;">
+            <img src="assets/foto7.jpg" alt="Foto 7" class="gallery-photo" onclick="openLightbox('assets/foto7.jpg')">
+            <img src="assets/foto8.jpg" alt="Foto 8" class="gallery-photo" onclick="openLightbox('assets/foto8.jpg')">
+        </div>
+
+        <!-- PANEL 5: Frase Especial (Transparente Light) -->
+        <div class="glass-panel panel-light reveal">
+            <p class="phrase" style="margin: 0; font-size: 22px;">
+                <span class="phrase-bold">"Bajo la estrella Evangeline, los sueños florecen y la magia despierta.<br><br>Te invito a acompañarme a celebrar mis XV años, en una noche donde los cuentos cobran vida y creer es el primer paso hacia un final feliz."</span>
+            </p>
+        </div>
+
+        <!-- FOTOS INTERCALADAS -->
+        <div class="glass-panel panel-dark reveal" style="padding: 20px; background: rgba(7, 25, 18, 0.5);">
+            <img src="assets/foto9.jpg" alt="Foto 9" class="gallery-photo" onclick="openLightbox('assets/foto9.jpg')">
+            <img src="assets/foto10.jpg" alt="Foto 10" class="gallery-photo" onclick="openLightbox('assets/foto10.jpg')">
+            <img src="assets/foto11.jpg" alt="Foto 11" class="gallery-photo" onclick="openLightbox('assets/foto11.jpg')">
+        </div>
+
+        <!-- PANEL 6: Formularios y RSVP (Oscuro) -->
+        <div class="glass-panel panel-dark reveal">
+            
+            <!-- Pases Digitales -->
+            <div class="info-label">Consulta tus Pases VIP</div>
+            <div style="font-family: 'Montserrat', sans-serif; font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Escribe tu nombre tal como aparece en tu invitación para descubrir tu boleto dorado.</div>
+            
+            <div class="form-container" style="margin-bottom: 25px;">
+                <input type="text" id="guest-search" class="form-input" placeholder="Ej. Marcos Cruz" onkeypress="if(event.key === 'Enter') searchPasses();">
+                <button onclick="searchPasses()" class="btn-gold">Buscar mis pases</button>
+                <div id="search-error" style="color: #ff6b6b; font-size: 12px; margin-top: 10px; display: none;">Nombre no encontrado. Intenta de nuevo o contacta a la quinceañera.</div>
+            </div>
+
+            <!-- Boleto Visual (Oculto por defecto) -->
+            <div id="ticket-container" style="display: none; margin-bottom: 30px;">
+                <div class="digital-ticket">
+                    <div class="ticket-header">
+                        <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; fill: var(--gold-primary); vertical-align: bottom; margin-right: 5px;"><path d="M12 2L15 9H22L16.5 13.5L18.5 21L12 17L5.5 21L7.5 13.5L2 9H9L12 2Z"/></svg>
+                        Pase Digital VIP
+                        <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; fill: var(--gold-primary); vertical-align: bottom; margin-left: 5px;"><path d="M12 2L15 9H22L16.5 13.5L18.5 21L12 17L5.5 21L7.5 13.5L2 9H9L12 2Z"/></svg>
+                    </div>
+                    
+                    <div class="ticket-body">
+                        <div id="ticket-name" style="font-family: 'Cinzel', serif; font-size: 18px; color: var(--gold-primary); margin-bottom: 15px; font-weight: bold; letter-spacing: 1px;"></div>
+                        <div style="font-family: 'Montserrat', sans-serif; font-size: 11px; color: var(--text-muted); text-transform: uppercase; letter-spacing: 2px; margin-bottom: 8px;">Pases Asignados</div>
+                        <div id="ticket-count" style="font-family: 'Cinzel', serif; font-weight: 700; font-size: 40px; color: #fff; line-height: 1; text-shadow: 0 0 10px var(--magic-glow);"></div>
+                    </div>
+                    
+                    <div class="ticket-footer">
+                        Toma captura de pantalla y presenta este pase al llegar al evento
+                    </div>
+                </div>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- RSVP -->
+            <div class="info-label">Confirmación de Asistencia</div>
+            <div style="font-family: 'Montserrat', sans-serif; font-size: 12px; color: var(--text-muted); margin-bottom: 15px;">Agradeceremos tu confirmación lo antes posible.</div>
+            <div class="form-container">
+                <input type="text" id="rsvp-name" class="form-input" placeholder="Escribe tu nombre completo">
+                
+                <select id="rsvp-status" class="form-input" onchange="toggleGuestInput()">
+                    <option value="">¿Asistirás al evento?</option>
+                    <option value="yes">Sí, ahí estaré</option>
+                    <option value="no">Lamentablemente no podré asistir</option>
+                </select>
+                
+                <input type="number" id="rsvp-guests" class="form-input" placeholder="¿Cuántas personas asistirán?" min="1" style="display: none;">
+                
+                <button onclick="sendRSVP()" class="btn-gold">Confirmar por WhatsApp</button>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Muro de Deseos -->
+            <div class="info-label">Deja un mensaje para Sophia</div>
+            <div class="form-container">
+                <input type="text" id="wish-name" class="form-input" placeholder="Tu Nombre">
+                <textarea id="wish-message" class="form-input" placeholder="Escribe tus buenos deseos para la quinceañera..."></textarea>
+                <button onclick="sendWish()" class="btn-gold">Enviar Mensaje</button>
+            </div>
+
+            <div style="font-family: 'Cinzel', serif; font-size: 11px; letter-spacing: 2px; color: var(--gold-secondary); margin-top: 40px;">
+                INVYTIA PREMIUM PREVIEW
+            </div>
+        </div>
+    </main>
+
+    <!-- Estructura Lightbox -->
+    <div id="lightbox" onclick="closeLightbox()">
+        <span class="close-lightbox" onclick="closeLightbox()">&times;</span>
+        <img id="lightbox-img" src="" alt="Imagen Ampliada" onclick="event.stopPropagation()">
+    </div>
+
+    <script>
+        // Lógica de Audio
+        const bgMusic = document.getElementById('bg-music');
+        const musicBtn = document.getElementById('music-btn');
+        let isMusicPlaying = false;
+
+        const playIcon = '<svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>';
+        const pauseIcon = '<svg viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+
+        function toggleMusic() {
+            if (isMusicPlaying) {
+                bgMusic.pause();
+                musicBtn.innerHTML = playIcon;
+            } else {
+                bgMusic.play();
+                musicBtn.innerHTML = pauseIcon;
+            }
+            isMusicPlaying = !isMusicPlaying;
+        }
+
+        function openEnvelope() {
+            const wrapper = document.querySelector('.envelope-wrapper');
+            const screen = document.getElementById('envelope-screen');
+            
+            wrapper.classList.add('open');
+            
+            setTimeout(() => {
+                screen.classList.add('fade-out');
+                document.body.classList.add('content-active');
+                createFireflies();
+                
+                // Activar las animaciones reveal visibles al cargar
+                revealElements();
+
+                bgMusic.play().then(() => {
+                    isMusicPlaying = true;
+                    musicBtn.innerHTML = pauseIcon;
+                }).catch(err => {
+                    console.log("Autoplay bloqueado. El usuario debe darle play manualmente.");
+                    isMusicPlaying = false;
+                    musicBtn.innerHTML = playIcon;
+                });
+            }, 1200);
+        }
+
+        // Lógica de Intersection Observer para animaciones On-Scroll
+        function revealElements() {
+            const reveals = document.querySelectorAll('.reveal');
+            const windowHeight = window.innerHeight;
+            const elementVisible = 100;
+
+            reveals.forEach((reveal) => {
+                const elementTop = reveal.getBoundingClientRect().top;
+                if (elementTop < windowHeight - elementVisible) {
+                    reveal.classList.add('active');
+                }
+            });
+        }
+        window.addEventListener('scroll', revealElements);
+
+        // Sistema de Luciérnagas Flotantes
+        function createFireflies() {
+            const container = document.getElementById('fireflies-container');
+            const count = 35; 
+            
+            for (let i = 0; i < count; i++) {
+                const firefly = document.createElement('div');
+                firefly.classList.add('firefly');
+                
+                const size = Math.random() * 4 + 2;
+                const left = Math.random() * 100;
+                const animDuration = Math.random() * 8 + 6;
+                const animDelay = Math.random() * 6;
+                
+                firefly.style.width = `${size}px`;
+                firefly.style.height = `${size}px`;
+                firefly.style.left = `${left}%`;
+                firefly.style.bottom = `-20px`;
+                firefly.style.animationDuration = `${animDuration}s`;
+                firefly.style.animationDelay = `${animDelay}s`;
+                
+                container.appendChild(firefly);
+            }
+        }
+
+        // Lógica de Cuenta Regresiva (7 de Noviembre 2026, 18:30:00 - Inicio de Recepción)
+        const eventDate = new Date("2026/11/07 18:30:00").getTime();
+
+        const countdownInterval = setInterval(() => {
+            const now = new Date().getTime();
+            const distance = eventDate - now;
+
+            if (distance < 0) {
+                clearInterval(countdownInterval);
+                document.getElementById("days").innerText = "00";
+                document.getElementById("hours").innerText = "00";
+                document.getElementById("minutes").innerText = "00";
+                document.getElementById("seconds").innerText = "00";
+                return;
+            }
+
+            const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            document.getElementById("days").innerText = days < 10 ? "0" + days : days;
+            document.getElementById("hours").innerText = hours < 10 ? "0" + hours : hours;
+            document.getElementById("minutes").innerText = minutes < 10 ? "0" + minutes : minutes;
+            document.getElementById("seconds").innerText = seconds < 10 ? "0" + seconds : seconds;
+        }, 1000);
+
+        // --- SISTEMA DE PASES DIGITALES (BUSCADOR) ---
+        // Se mantiene la base de datos de invitados de ejemplo
+        const guestData = {"Abigail Osorio": 3, "Abuelita Alicia": 1, "Abuelito Javier": 2, "Abuelito José Luis": 2, "Adriana Manríquez": 2, "Adrián Gonzales": 2, "Adrián López": 4, "Alberto Cerecer": 3, "Alejandro Miguel": 5, "Alexis Cruz": 4, "Alfonso": 2, "Amaya Rojo": 1, "Angelica": 4, "Antonio Pérez": 5, "Araceli Zaimez": 2, "Aranza": 1, "Aristeo": 4, "Barut López": 4, "Beatriz": 2, "Beatriz Tobon": 3, "Belén Galicia": 1, "Cesar Pimentel": 2, "Chirris": 1, "Claudia Sánchez": 2, "César Miguel": 1, "Dagoberto Reyes": 2, "Dalvi Miguel": 1, "Diana López": 8, "Dianey": 1, "Donaciano Antonio": 2, "Dulce Susana": 2, "Edwin Valdez": 2, "Enrique Cruz": 3, "Enrique López": 4, "Erick": 2, "Ernesto Salinas": 3, "Esther Cruz": 4, "Esther Reyes": 1, "Estrella": 3, "Ethan Ernesto": 1, "Eustaquio Cruz": 5, "Eustolia González": 5, "Evelin Cruz": 4, "Federico Francisco": 5, "Fernanda": 1, "Flavio  Jiménez": 3, "Francisco Miguel": 4, "Frida": 1, "Fulgencio Martín": 4, "Félix Gonzales": 5, "Félix Torrijos": 4, "Gabriel": 1, "Gabriela Peralta": 1, "Gerardo": 4, "Gina Díaz Reyes": 2, "Golla": 1, "Griselda Pérez": 4, "Gudelia Miguel": 2, "Hector  Vargas": 6, "Humberto Meléndez Pacheco": 2, "Héctor": 1, "Héctor Valdez": 3, "Isaac Alvarado": 2, "Ismael Cruz": 3, "Ismael Zamudio": 2, "Jaime Ramos": 4, "Jair": 2, "Janett": 4, "Javier Jiménez": 2, "Javier Mendoza": 4, "Jazz Raya": 4, "Jenni Santos": 4, "Jessi Cruz": 2, "Jesús": 1, "Joel Jiménez": 2, "Jorge": 2, "Jorge Valdez": 5, "Jose Carmen Tafolla": 6, "Josefina Méndez": 5, "Joselin": 3, "Josué": 2, "Juan Carlos Jiménez": 2, "Juan Ramirez": 4, "Juan Vargas": 2, "Julieta": 1, "Juventino Cruz": 2, "Karina Miguel": 1, "Lucero González": 4, "Luis Alberto": 2, "Luis Alberto Jiménez": 3, "Luis Bolaños": 4, "Luis Mendoza": 3, "Luis Ávalos Estrada": 4, "Magdalena Jiménez": 3, "Maitechu Rangel": 5, "Marco A.": 3, "Marco A.  Miguel": 3, "Marco Arana": 2, "Marcos Cruz": 5, "Margarita": 5, "Martha Villagran": 1, "Martín Retana": 4, "Maurilio Cruz": 4, "Max": 1, "Mayra": 4, "Mireya": 3, "Noemí Cruz": 2, "Noé Ferrer": 1, "Omar  López": 1, "Onesimo": 5, "Paula Gonzales": 7, "Pina": 1, "Ramiro  Reyes": 2, "Raúl   Reyes": 1, "Regina": 1, "Renata Piña": 1, "Renatita": 1, "Ricardo Bautista": 2, "Ricardo Cruz": 4, "Rodolfo López": 2, "Rosalba Reyes": 3, "Roy Ortiz": 3, "Rutilio  Jiménez": 10, "Said Flores": 1, "Samantha Ponce": 1, "Sara Aletia": 1, "Sebastián Reyes": 5, "Sergio Bautista": 2, "Silvia Galvan": 4, "Silvia Reyes": 8, "Susana Jiménez": 3, "Tabata Denisse Robles": 5, "Tais": 1, "Tomasa Miguel": 2, "Ulises Eduardo Gonzales": 4, "Valeria": 1, "Venancio Cruz": 2, "Victoria": 1, "Víctor Reyes": 5, "Wenceslao Ferrer": 3, "Yahel": 1, "Yaz": 2, "Yazmín Gonzales": 2, "Álvaro López": 2};
+
+        // Función para quitar acentos y normalizar texto
+        function normalizeString(str) {
+            return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase().trim();
+        }
+
+        // Mostrar Pases y Animar Ticket
+        function searchPasses() {
+            const searchInput = document.getElementById("guest-search").value;
+            const errorMsg = document.getElementById("search-error");
+            const container = document.getElementById("ticket-container");
+            const nameEl = document.getElementById("ticket-name");
+            const countEl = document.getElementById("ticket-count");
+            const ticketElement = document.querySelector(".digital-ticket");
+
+            if (searchInput.length < 2) {
+                errorMsg.style.display = "block";
+                errorMsg.textContent = "Por favor, escribe un nombre válido.";
+                container.style.display = "none";
+                return;
+            }
+
+            const normalizedInput = normalizeString(searchInput);
+            let foundName = null;
+            let foundPasses = 0;
+
+            // 1. Intentar coincidencia exacta
+            for (const [name, passes] of Object.entries(guestData)) {
+                if (normalizeString(name) === normalizedInput) {
+                    foundName = name;
+                    foundPasses = passes;
+                    break;
+                }
+            }
+
+            // 2. Si no es exacta, intentar encontrar si parte del nombre coincide
+            if (!foundName) {
+                const matches = [];
+                for (const [name, passes] of Object.entries(guestData)) {
+                    if (normalizeString(name).includes(normalizedInput)) {
+                        matches.push({name, passes});
+                    }
+                }
+                
+                if (matches.length === 1) {
+                    foundName = matches[0].name;
+                    foundPasses = matches[0].passes;
+                }
+            }
+            
+            if (foundName) {
+                errorMsg.style.display = "none";
+                nameEl.textContent = foundName;
+                countEl.textContent = foundPasses + (foundPasses == 1 ? " PASE" : " PASES");
+                
+                container.style.display = "block";
+                
+                // Reiniciar animación
+                ticketElement.style.animation = 'none';
+                ticketElement.offsetHeight; // trigger reflow
+                ticketElement.style.animation = null; 
+            } else {
+                errorMsg.style.display = "block";
+                errorMsg.textContent = "No encontramos este nombre. Intenta con un solo nombre y tu primer apellido.";
+                container.style.display = "none";
+            }
+        }
+
+        // Mostrar/Ocultar campo de cantidad de personas
+        function toggleGuestInput() {
+            const status = document.getElementById("rsvp-status").value;
+            const guestInput = document.getElementById("rsvp-guests");
+            
+            if (status === "yes") {
+                guestInput.style.display = "block";
+            } else {
+                guestInput.style.display = "none";
+                guestInput.value = ""; // Limpiar si selecciona no
+            }
+        }
+
+        // Funciones de Lightbox
+        function openLightbox(src) {
+            const lightbox = document.getElementById("lightbox");
+            const lightboxImg = document.getElementById("lightbox-img");
+            lightboxImg.src = src;
+            lightbox.classList.add("active");
+            document.body.style.overflow = "hidden"; // Deshabilita el scroll
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById("lightbox");
+            lightbox.classList.remove("active");
+            document.body.style.overflow = "auto"; // Habilita el scroll
+            setTimeout(() => {
+                document.getElementById("lightbox-img").src = "";
+            }, 300);
+        }
+
+        // Envío de WhatsApp - RSVP
+        function sendRSVP() {
+            const name = document.getElementById("rsvp-name").value.trim();
+            const status = document.getElementById("rsvp-status").value;
+            const guests = document.getElementById("rsvp-guests").value.trim();
+            
+            if (name === "") {
+                alert("Por favor, ingresa tu nombre completo.");
+                return;
+            }
+            
+            if (status === "") {
+                alert("Por favor, selecciona si asistirás o no.");
+                return;
+            }
+
+            let message = "";
+            
+            if (status === "yes") {
+                if (guests === "" || parseInt(guests) < 1) {
+                    alert("Por favor, ingresa un número válido de personas que asistirán.");
+                    return;
+                }
+                message = encodeURIComponent(`¡Hola! Soy ${name}. Sí, confirmo mi asistencia a los XV años de Sophia Abigail. Asistiremos ${guests} personas de las asignadas a nuestro pase.`);
+            } else {
+                message = encodeURIComponent(`¡Hola! Soy ${name}. Lamentablemente no podré asistir a los XV años de Sophia Abigail. ¡Muchas gracias por la invitación!`);
+            }
+
+            const phone = "525611137461";
+            window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
+        }
+
+        // Envío de WhatsApp - Muro de Deseos
+        function sendWish() {
+            const name = document.getElementById("wish-name").value.trim();
+            const wish = document.getElementById("wish-message").value.trim();
+            
+            if (name === "" || wish === "") {
+                alert("Por favor, ingresa tu nombre y un mensaje.");
+                return;
+            }
+            const phone = "525611137461";
+            const message = encodeURIComponent(`Hola Sophia Abigail, soy ${name}. Te dejo este mensaje con mucho cariño:\n\n"${wish}"`);
+            window.open(`https://wa.me/${phone}?text=${message}`, '_blank');
+        }
+    </script>
+</body>
+</html>
