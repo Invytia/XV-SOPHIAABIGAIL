@@ -351,7 +351,6 @@
 
         .main-title {
             font-family: 'Pinyon Script', cursive;
-            /* Se ajusta de forma dinámica, evitando que se corte en móviles muy pequeños */
             font-size: clamp(40px, 15vw, 82px); 
             color: var(--gold-primary);
             margin-bottom: 28px;
@@ -386,7 +385,6 @@
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
         }
 
-        /* Animación de entrada inicial suave para fotos */
         .reveal .gallery-photo.anim-item {
             transform: scale(0.9) translateY(20px);
         }
@@ -539,7 +537,7 @@
 
         .calendar-day.empty { color: transparent; }
 
-        /* Botones Generales con Brillo (Shine) animado */
+        /* Botones Generales */
         .btn-gold {
             position: relative;
             display: inline-block;
@@ -849,10 +847,116 @@
             100% { transform: translateY(-100vh) translateX(50px) scale(1.2); opacity: 0; }
         }
 
+        /* ============================================
+           NUEVO ESTILO DE ITINERARIO (TIMELINE)
+           ============================================ */
+        .timeline {
+            position: relative;
+            max-width: 100%;
+            margin: 30px auto;
+            padding: 20px 0;
+        }
+        
+        .timeline::after {
+            content: '';
+            position: absolute;
+            width: 2px;
+            background-color: var(--gold-secondary);
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0.5;
+        }
+        
+        .timeline-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            margin-bottom: 45px;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .timeline-item:last-child {
+            margin-bottom: 0;
+        }
+        
+        .timeline-content, .timeline-icon-wrapper {
+            width: 45%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Ítem hacia la izquierda (Texto izquierda, Ícono derecha) */
+        .timeline-item.left .timeline-content {
+            align-items: flex-end;
+            text-align: right;
+        }
+        .timeline-item.left .timeline-icon-wrapper {
+            align-items: flex-start;
+        }
+        
+        /* Ítem hacia la derecha (Ícono izquierda, Texto derecha) */
+        .timeline-item.right {
+            flex-direction: row-reverse;
+        }
+        .timeline-item.right .timeline-content {
+            align-items: flex-start;
+            text-align: left;
+        }
+        .timeline-item.right .timeline-icon-wrapper {
+            align-items: flex-end;
+        }
+        
+        /* El punto central */
+        .timeline-dot {
+            position: absolute;
+            left: 50%;
+            transform: translate(-50%, 0);
+            width: 14px;
+            height: 14px;
+            background-color: var(--gold-primary);
+            border-radius: 50%;
+            box-shadow: 0 0 8px var(--magic-glow);
+            z-index: 2;
+        }
+        
+        .timeline-icon-wrapper svg {
+            width: 45px;
+            height: 45px;
+            fill: var(--gold-primary);
+            filter: drop-shadow(0 0 5px rgba(223, 186, 107, 0.4));
+        }
+        
+        .timeline-time {
+            font-family: 'Cinzel', serif;
+            color: var(--gold-primary);
+            font-size: 20px;
+            font-weight: 700;
+            letter-spacing: 1px;
+            margin-bottom: 2px;
+        }
+        
+        .timeline-title {
+            font-family: 'Montserrat', sans-serif;
+            color: var(--text-light);
+            font-size: 13px;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            line-height: 1.4;
+        }
+
         /* Responsivo Especial */
         @media (max-width: 420px) {
             .glass-panel { padding: 35px 20px; }
             .phrase { font-size: 21px; }
+            .timeline-time { font-size: 17px; }
+            .timeline-title { font-size: 11px; }
+            .timeline-icon-wrapper svg { width: 38px; height: 38px; }
+            .timeline-dot { width: 12px; height: 12px; }
         }
 
         @media (max-width: 380px) {
@@ -915,7 +1019,6 @@
             </div>
 
             <div class="section-tag anim-item">Mis XV Años</div>
-            <!-- El título usa JS para asegurar que no se corten las letras en móviles -->
             <h1 class="main-title anim-item">Sophia Abigail</h1>
 
             <div class="hero-image-container float-anim anim-item">
@@ -1055,43 +1158,112 @@
             <a href="https://maps.app.goo.gl/bdK6rRJMWqfDh3db8" target="_blank" class="btn-gold anim-item">Ver Ubicación en Mapa</a>
         </section>
 
-        <!-- ============ SECCIÓN: ITINERARIO ============ -->
+        <!-- ============ SECCIÓN: ITINERARIO (NUEVO ESTILO VERTICAL) ============ -->
         <section class="glass-panel panel-light reveal" id="itinerario" aria-label="Itinerario del evento">
-            <div class="info-label anim-item" style="font-size: 20px; margin-bottom: 25px;">Itinerario</div>
+            <div class="info-label anim-item" style="font-size: 22px; margin-bottom: 5px;">Itinerario</div>
+            <div class="divider anim-item" style="margin-bottom: 40px;"></div>
             
-            <div class="anim-item" style="margin-bottom: 20px;">
-                <div style="font-family: 'Cinzel', serif; color: var(--gold-primary); font-size: 22px; font-weight: bold;">6:30 PM</div>
-                <div style="font-family: 'Montserrat', sans-serif; color: var(--text-light); font-size: 16px; margin-top: 5px;">La Magia Comienza en el Bayou</div>
-            </div>
-            
-            <div class="anim-item" style="margin-bottom: 20px;">
-                <div style="font-family: 'Cinzel', serif; color: var(--gold-primary); font-size: 22px; font-weight: bold;">7:00 PM</div>
-                <div style="font-family: 'Montserrat', sans-serif; color: var(--text-light); font-size: 16px; margin-top: 5px;">Misa de Acción de Gracias</div>
-            </div>
-            
-            <div class="anim-item" style="margin-bottom: 20px;">
-                <div style="font-family: 'Cinzel', serif; color: var(--gold-primary); font-size: 22px; font-weight: bold;">7:30 PM</div>
-                <div style="font-family: 'Montserrat', sans-serif; color: var(--text-light); font-size: 16px; margin-top: 5px;">Destellos & Recuerdos</div>
-            </div>
-            
-            <div class="anim-item" style="margin-bottom: 20px;">
-                <div style="font-family: 'Cinzel', serif; color: var(--gold-primary); font-size: 22px; font-weight: bold;">8:00 PM</div>
-                <div style="font-family: 'Montserrat', sans-serif; color: var(--text-light); font-size: 16px; margin-top: 5px;">El Banquete de Tiana</div>
-            </div>
-            
-            <div class="anim-item" style="margin-bottom: 20px;">
-                <div style="font-family: 'Cinzel', serif; color: var(--gold-primary); font-size: 22px; font-weight: bold;">9:00 PM</div>
-                <div style="font-family: 'Montserrat', sans-serif; color: var(--text-light); font-size: 16px; margin-top: 5px;">Pide un Deseo a la Estrella</div>
-            </div>
-            
-            <div class="anim-item" style="margin-bottom: 20px;">
-                <div style="font-family: 'Cinzel', serif; color: var(--gold-primary); font-size: 22px; font-weight: bold;">10:00 PM</div>
-                <div style="font-family: 'Montserrat', sans-serif; color: var(--text-light); font-size: 16px; margin-top: 5px;">El Gran Baile Real</div>
-            </div>
-            
-            <div class="anim-item" style="margin-bottom: 10px;">
-                <div style="font-family: 'Cinzel', serif; color: var(--gold-primary); font-size: 22px; font-weight: bold;">1:30 AM</div>
-                <div style="font-family: 'Montserrat', sans-serif; color: var(--text-light); font-size: 16px; margin-top: 5px;">Un Final de Cuento de Hadas</div>
+            <div class="timeline anim-item">
+                
+                <!-- 1. La Magia Comienza (Sparkles) -->
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <div class="timeline-time">6:30 PM</div>
+                        <div class="timeline-title">La Magia Comienza<br>en el Bayou</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-icon-wrapper">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M19 8l-1 2-2 1 2 1 1 2 1-2 2-1-2-1-1-2zm-8-3l-2 4-4 2 4 2 2 4 2-4 4-2-4-2-2-4zm1 14l-1 2-2 1 2 1 1 2 1-2 2-1-2-1-1-2z"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- 2. Misa de Acción de Gracias (Chalice) -->
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <div class="timeline-time">7:00 PM</div>
+                        <div class="timeline-title">Misa de Acción<br>de Gracias</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-icon-wrapper">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 5.5a2 2 0 1 0 0-4 2 2 0 0 0 0 4zm-4.5 1h9c0 3.5-2.2 6.5-5.3 7.8L12 17v3h3v2H9v-2h3v-3l.8-2.7C9.7 13 7.5 10 7.5 6.5z"/>
+                            <path d="M11.3 0h1.5v2h-1.5zM15.4.8l1 .8-1 1.5-1-.8zM7.5 1.6l1-.8 1 1.5-1 .8z"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- 3. Destellos & Recuerdos (Camera) -->
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <div class="timeline-time">7:30 PM</div>
+                        <div class="timeline-title">Destellos &<br>Recuerdos</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-icon-wrapper">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 15c1.66 0 3-1.34 3-3s-1.34-3-3-3-3 1.34-3 3 1.34 3 3 3zm8-9h-3.2l-1.8-2H9L7.2 6H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 14H4V8h4.05l1.83-2h4.24l1.83 2H20v12z"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- 4. El Banquete de Tiana (Cloche) -->
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <div class="timeline-time">8:00 PM</div>
+                        <div class="timeline-title">El Banquete<br>de Tiana</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-icon-wrapper">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 6c-3.6 0-6.6 2.6-7.3 6H4v1h16v-1h-.7c-.7-3.4-3.7-6-7.3-6zm0 1.5c2.8 0 5 2.1 5.6 4.8H6.4c.6-2.7 2.8-4.8 5.6-4.8zM2 15h20v2H2v-2zM5 18h14l-2 3H7l-2-3z"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- 5. Pide un Deseo a la Estrella (Shooting Star) -->
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <div class="timeline-time">9:00 PM</div>
+                        <div class="timeline-title">Pide un Deseo<br>a la Estrella</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-icon-wrapper">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- 6. El Gran Baile Real (Princess Dress) -->
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <div class="timeline-time">10:00 PM</div>
+                        <div class="timeline-title">El Gran Baile<br>Real</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-icon-wrapper">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 2c-.5 0-.8.4-.8.9V4h1.6V2.9c0-.5-.3-.9-.8-.9zm-2.8 3l-.6 1.7h6.8L14.8 5H9.2zm-1.8 2.5L9 12.8c-1.3 1-3.6 1.4-5.3 1.2l3 8h10.6l3-8c-1.7.2-4-.2-5.3-1.2l1.6-5.3H7.4z"/>
+                        </svg>
+                    </div>
+                </div>
+
+                <!-- 7. Un Final de Cuento de Hadas (Crescent Moon) -->
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <div class="timeline-time">1:30 AM</div>
+                        <div class="timeline-title">Un Final de<br>Cuento de Hadas</div>
+                    </div>
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-icon-wrapper">
+                        <svg viewBox="0 0 24 24">
+                            <path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9c0-.46-.04-.92-.1-1.36-.98 1.37-2.58 2.26-4.4 2.26-2.98 0-5.4-2.42-5.4-5.4 0-1.81.89-3.42 2.26-4.4C12.92 3.04 12.46 3 12 3zm0 16c-3.86 0-7-3.14-7-7s3.14-7 7-7c.22 0 .44.02.66.05C11.16 6.38 10 8.05 10 10c0 2.76 2.24 5 5 5 1.95 0 3.62-1.16 4.95-2.66.03.22.05.44.05.66 0 3.86-3.14 7-7 7z"/>
+                        </svg>
+                    </div>
+                </div>
+
             </div>
         </section>
 
@@ -1287,7 +1459,6 @@
         }
 
         // --- ANIMACIÓN LETRA POR LETRA DEL TÍTULO PRINCIPAL ---
-        // Mejorado para prevenir que las letras de una misma palabra se dividan a la mitad en móviles.
         function wrapTitleLetters() {
             const title = document.querySelector('.main-title');
             if (!title) return;
